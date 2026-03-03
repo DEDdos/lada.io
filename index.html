@@ -227,6 +227,7 @@ body.dark .msg-type.vibe{background:#3a2808;}
 .ob-canvas{position:fixed;inset:0;z-index:900;pointer-events:none;}
 
 /* tooltip popup */
+
 .ob-popup{
   position:fixed;z-index:910;
   background:white;border-radius:20px;
@@ -236,7 +237,9 @@ body.dark .msg-type.vibe{background:#3a2808;}
   transition:opacity .4s, transform .4s;
   opacity:0;transform:translateY(12px);
   pointer-events:none;
+
 }
+.ob-popup{max-height:calc(100vh - 120px);overflow:auto;-webkit-overflow-scrolling:touch}
 .ob-popup.show{opacity:1;transform:none;pointer-events:auto;}
 .ob-popup-step{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;}
 .ob-popup-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#2d1a1f;margin-bottom:6px;line-height:1.3;}
@@ -772,50 +775,59 @@ function showTourStep(idx){
 function positionPopup(rect, arrow){
   const popup = document.getElementById('obPopup');
   const pw = Math.min(300, window.innerWidth - 32);
-  const ph = 220; // approx
   const margin = 16;
   const vw = window.innerWidth, vh = window.innerHeight;
 
+  // apply width first so we can measure real height
+  popup.style.width = pw + 'px';
+
+  // ensure popup is measurable (it may be hidden via .show toggles).
+  popup.style.visibility = 'hidden';
+  popup.classList.remove('show');
+  const ph = Math.min(popup.offsetHeight || 220, vh - (margin * 2));
+  // restore visibility after measuring
+  popup.style.visibility = '';
+
   let top, left;
 
-  // try below
-  if (rect.bottom + ph + 60 < vh) {
+  // prefer placing below the target if enough room (leave extra space for iOS home indicator)
+  const safeBottom = vh - 44; // leave ~44px for home indicator / bottom UI
+  if (rect.bottom + ph + 40 < safeBottom) {
     top = rect.bottom + 18;
   } else {
     top = rect.top - ph - 18;
   }
+
   // center horizontally on target, clamp to screen
   left = rect.left + rect.width/2 - pw/2;
   left = Math.max(margin, Math.min(vw - pw - margin, left));
-  top = Math.max(margin + 52, Math.min(vh - ph - margin, top));
 
-  // fab is top-right corner — put popup below-left
+  // if target is at very top (fab), place popup aligned to right
   if (rect.top < 100) {
     top = rect.bottom + 14;
     left = Math.max(margin, vw - pw - margin);
   }
 
+  // clamp top so popup stays inside viewport; if content is too tall, max-height will allow scrolling
+  top = Math.max(margin + 52, Math.min(vh - ph - margin - 12, top));
+
   popup.style.top = top + 'px';
   popup.style.left = left + 'px';
-  popup.style.width = pw + 'px';
 }
 
 function positionArrow(rect, direction){
   const arr = document.getElementById('obArrow');
   arr.style.opacity = '1';
   let top, left;
-
-  if(rect.top < 100){ // fab in corner
-    arr.textContent = '👆';
-    top = rect.bottom + 4;
-    left = rect.left + rect.width/2 - 16;
-    arr.style.transform = '';
-  } else {
-    arr.textContent = '👆';
-    top = rect.bottom + 4;
-    left = rect.left + rect.width/2 - 16;
-    arr.style.transform = '';
-  }
+  arr.textContent = '👆';
+  top = rect.bottom + 4;
+  left = rect.left + rect.width/2 - 16;
+  // clamp arrow inside viewport
+  const vh = window.innerHeight;
+  const margin = 8;
+  top = Math.max(margin, Math.min(vh - 40, top));
+  left = Math.max(margin, Math.min(window.innerWidth - 40, left));
+  arr.style.transform = '';
   arr.style.top = top + 'px';
   arr.style.left = left + 'px';
 }
