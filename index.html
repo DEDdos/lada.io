@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>для ладошки 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* ===== THEME ===== */
+:root{
+  --bg:#fff8f5;--card:#fff;--text:#2d1a1f;--sub:#b88090;--muted:#ddc0c8;--div:rgba(0,0,0,.07);
+  --rose:#e8637a;--blush:#fde8ed;--warm:#c04060;
+  --mint:#e8f5f0;--green:#4caf89;
+  --purple:#9b6fc4;--lavender:#f2eaff;
+  --sh1:rgba(232,99,122,.14);--sh2:rgba(76,175,137,.12);
+}
+body.dark{
+  --bg:#16100d;--card:#1f1510;--text:#f0dde2;--sub:#9a7080;--muted:#4a3038;--div:rgba(255,255,255,.07);
+  --warm:#e87a8a;--blush:#36181e;--mint:#0d1e16;--lavender:#1e1428;
+  --sh1:rgba(0,0,0,.5);--sh2:rgba(0,0,0,.5);
+}
+
+/* ===== BASE ===== */
+body{
+  min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:'Nunito',sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  padding:62px 16px 48px;gap:14px;
+  transition:background .35s,color .35s;overflow-x:hidden;
+}
+
+/* Improve touch responsiveness on iOS Safari */
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+
+.petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.petal{position:absolute;opacity:0;animation:fall linear infinite;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:.8}100%{transform:translateY(110vh) rotate(400deg);opacity:0}}
+
+@keyframes rise{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes fadeMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-65px) scale(1.2)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+@keyframes blink{0%,100%{opacity:.38}50%{opacity:1}}
+
+/* ===== TOP BAR ===== */
+.top-bar{position:fixed;top:0;left:0;right:0;height:52px;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:var(--card);border-bottom:1px solid var(--div);transition:background .35s;}
+.top-left{display:flex;gap:7px;}
+.tb-btn{background:none;border:1.5px solid var(--div);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:.95rem;color:var(--text);transition:background .2s;}
+.tb-btn:hover{background:var(--blush);}
+
+.fab{display:flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--blush);border-radius:20px;padding:7px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.83rem;color:var(--warm);box-shadow:0 4px 16px var(--sh1);transition:transform .15s,box-shadow .15s,background .35s;user-select:none;}
+.fab:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--sh1);}
+.fab:active{transform:scale(.95);}
+
+/* ===== TOAST ===== */
+.toast-container{position:fixed;top:60px;right:14px;z-index:2000;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{background:var(--card);border-radius:14px;padding:10px 14px;max-width:220px;box-shadow:0 4px 20px rgba(0,0,0,.14),0 0 0 1px var(--div);animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;font-size:.78rem;pointer-events:auto;transition:background .35s;}
+.toast.out{animation:toastOut .3s ease forwards;}
+.toast-title{font-weight:800;color:var(--purple);margin-bottom:2px;font-size:.82rem;}
+.toast-body{color:var(--sub);}
+
+/* ===== CARDS ===== */
+.card{position:relative;z-index:1;background:var(--card);border-radius:26px;padding:30px 26px 26px;max-width:440px;width:100%;text-align:center;box-shadow:0 4px 6px var(--sh1),0 18px 56px var(--sh1),0 0 0 1px rgba(232,99,122,.06);animation:rise .7s .05s cubic-bezier(.22,1,.36,1) both;transition:background .35s;}
+.side-card{position:relative;z-index:1;background:var(--card);border-radius:22px;padding:20px 24px 18px;max-width:440px;width:100%;transition:background .35s;}
+.side-card.work-c{box-shadow:0 4px 6px var(--sh1),0 14px 40px var(--sh1),0 0 0 1px rgba(232,99,122,.05);animation:rise .75s .1s cubic-bezier(.22,1,.36,1) both;}
+.side-card.vac-c{box-shadow:0 4px 6px var(--sh2),0 14px 40px var(--sh2),0 0 0 1px rgba(76,175,137,.07);animation:rise .75s .15s cubic-bezier(.22,1,.36,1) both;}
+
+/* GREETING */
+.greeting-card{position:relative;z-index:1;background:var(--card);border-radius:22px;padding:18px 26px 16px;max-width:440px;width:100%;text-align:center;box-shadow:0 4px 6px var(--sh1),0 14px 40px var(--sh1);border-top:3px solid var(--rose);animation:rise .6s cubic-bezier(.22,1,.36,1) both;transition:background .35s;}
+.greeting-emoji{font-size:2rem;margin-bottom:5px;display:block;animation:pulse 2s ease-in-out infinite;}
+.greeting-text{font-family:'Playfair Display',serif;font-style:italic;font-size:1.25rem;color:var(--text);margin-bottom:2px;transition:color .35s;}
+.greeting-sub{font-size:.73rem;color:var(--sub);letter-spacing:.04em;}
+
+/* CAT */
+.cat-frame{width:188px;height:188px;margin:0 auto 8px;border-radius:50%;overflow:visible;border:4px solid var(--blush);outline:2.5px dashed var(--rose);outline-offset:4px;background:var(--blush);position:relative;cursor:pointer;transition:transform .1s,box-shadow .1s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.cat-frame::after{content:'';position:absolute;inset:-12px;border-radius:50%;z-index:2;}
+.cat-frame:hover{transform:scale(1.04);box-shadow:0 8px 28px var(--sh1);}
+.cat-frame:active{transform:scale(.92);}
+.cat-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .45s;pointer-events:none;border-radius:50%;overflow:hidden;}
+.cat-frame img.hidden{opacity:0;}
+.cat-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.6rem;transition:opacity .3s;}
+.cat-loader.done{opacity:0;pointer-events:none;}
+.click-hint{font-size:.68rem;color:var(--sub);margin-top:5px;animation:blink 2.5s ease-in-out infinite;}
+
+/* MESSAGES */
+.msg-row{margin-top:14px;}
+.msg-type{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:10px;}
+.msg-type.love{background:var(--blush);color:var(--warm);}
+.msg-type.vibe{background:#fff3e0;color:#e07820;}
+.msg-type.hype{background:var(--mint);color:var(--green);}
+.msg-type.curse{background:var(--lavender);color:var(--purple);}
+body.dark .msg-type.vibe{background:#3a2808;}
+.message{font-family:'Playfair Display',serif;font-style:italic;font-size:1.28rem;line-height:1.55;color:var(--text);margin-bottom:6px;min-height:2.5em;animation:fadeMsg .4s ease both;transition:color .35s;}
+.sub{font-size:.74rem;color:var(--sub);letter-spacing:.04em;text-transform:uppercase;margin-bottom:20px;}
+.btn{background:var(--rose);color:white;border:none;border-radius:100px;padding:11px 24px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(232,99,122,.35);}
+.btn:hover{background:var(--warm);transform:translateY(-2px);}
+.btn:active{transform:none;}
+.date-line{margin-top:14px;font-size:.68rem;color:var(--muted);letter-spacing:.04em;}
+.float-thing{position:fixed;pointer-events:none;font-size:1rem;font-weight:800;color:var(--rose);animation:floatUp .85s ease forwards;z-index:999;}
+
+/* TRACKERS */
+.tracker-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.tracker-icon{font-size:1.4rem;}
+.tracker-header h2{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);transition:color .35s;}
+.tracker-header h2 small{display:block;font-family:'Nunito',sans-serif;font-style:normal;font-size:.64rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+.work-pw{background:var(--blush);border-radius:100px;height:11px;overflow:hidden;margin-bottom:8px;}
+.work-pb{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--rose),#f093a4);transition:width 1.2s cubic-bezier(.22,1,.36,1);position:relative;}
+.work-pb::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:14px;height:14px;background:var(--card);border:3px solid var(--rose);border-radius:50%;transition:background .35s;}
+.vac-pw{background:var(--mint);border-radius:100px;height:11px;overflow:hidden;margin-bottom:8px;}
+.vac-pb{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--green),#84d4b0);transition:width 1.2s cubic-bezier(.22,1,.36,1);position:relative;}
+.vac-pb::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:14px;height:14px;background:var(--card);border:3px solid var(--green);border-radius:50%;transition:background .35s;}
+.t-stats{display:flex;justify-content:space-between;font-size:.7rem;color:var(--sub);margin-bottom:10px;}
+.t-info{font-size:.77rem;color:var(--sub);text-align:center;padding:8px 12px;background:var(--blush);border-radius:10px;line-height:1.55;transition:background .35s;}
+.t-info strong{color:var(--warm);font-size:.98rem;}
+.t-msg{font-family:'Playfair Display',serif;font-style:italic;font-size:1.04rem;color:var(--text);text-align:center;padding:4px 0 2px;transition:color .35s;}
+.t-sub{font-size:.7rem;color:var(--sub);text-align:center;margin-top:3px;}
+.days-n{font-family:'Playfair Display',serif;font-size:2.3rem;font-weight:700;color:var(--green);line-height:1;display:block;}
+.days-l{font-size:.75rem;color:var(--sub);}
+.vac-info{font-size:.73rem;color:#9cbfb0;text-align:center;padding:7px 12px;background:var(--mint);border-radius:10px;margin-top:4px;transition:background .35s;}
+.edit-btn{background:none;border:1.5px solid rgba(76,175,137,.3);border-radius:8px;font-size:.69rem;color:var(--sub);padding:3px 9px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;transition:background .2s;margin-top:8px;}
+.edit-btn:hover{background:var(--mint);}
+.date-edit{display:none;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed rgba(76,175,137,.3);}
+.date-edit.open{display:flex;}
+.date-edit label{font-size:.7rem;color:var(--sub);font-weight:600;}
+.date-edit input[type=date]{border:1.5px solid rgba(76,175,137,.3);border-radius:9px;padding:7px 11px;font-family:'Nunito',sans-serif;font-size:.86rem;color:var(--text);background:var(--card);outline:none;transition:border-color .2s,background .35s,color .35s;}
+.date-edit input:focus{border-color:var(--green);}
+.save-btn{background:var(--green);color:white;border:none;border-radius:9px;padding:7px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;align-self:flex-start;transition:background .2s;}
+.save-btn:hover{background:#3d9870;}
+.no-vac p{font-size:.82rem;color:var(--sub);margin-bottom:8px;text-align:center;}
+
+/* ===== DRAWER ===== */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:499;opacity:0;pointer-events:none;transition:opacity .35s;}
+.drawer-overlay.open{opacity:1;pointer-events:auto;}
+.drawer{position:fixed;top:0;right:-400px;width:380px;height:100%;z-index:500;background:var(--card);border-left:1px solid var(--div);transition:right .4s cubic-bezier(.22,1,.36,1),background .35s;display:flex;flex-direction:column;overflow:hidden;box-shadow:-8px 0 40px rgba(0,0,0,.2);}
+.drawer.open{right:0;}
+@media(max-width:420px){.drawer{width:100%;right:-100%;}}
+.dw-header{padding:14px 18px 12px;border-bottom:1px solid var(--div);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.dw-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);transition:color .35s;}
+.dw-sub{font-size:.66rem;color:var(--sub);margin-top:1px;}
+.dw-close{background:none;border:1.5px solid var(--div);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.88rem;color:var(--sub);transition:background .2s;}
+.dw-close:hover{background:var(--blush);}
+.dw-stats{padding:14px 18px;border-bottom:1px solid var(--div);display:flex;justify-content:space-around;flex-shrink:0;}
+.dw-stat{text-align:center;}
+.dw-big{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--text);line-height:1;transition:color .35s;}
+.dw-lbl{font-size:.62rem;color:var(--sub);letter-spacing:.05em;text-transform:uppercase;margin-top:2px;}
+.sh-tabs{display:flex;border-bottom:1px solid var(--div);flex-shrink:0;}
+.sh-tab{flex:1;padding:10px 6px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.77rem;font-weight:700;color:var(--sub);cursor:pointer;transition:color .2s,background .2s;}
+.sh-tab.active{color:var(--purple);background:var(--lavender);}
+.sh-tab:hover:not(.active){background:var(--lavender);opacity:.6;}
+.sh-body{padding:10px 12px 20px;overflow-y:auto;flex:1;}
+.sh-body::-webkit-scrollbar{width:3px;}
+.sh-body::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px;}
+.sh-item{display:flex;align-items:center;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;transition:background .15s,transform .1s;margin-bottom:4px;user-select:none;-webkit-user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:52px;}
+.sh-item:hover:not(.locked):not(.bought){background:var(--lavender);transform:translateX(2px);}
+.sh-item:active:not(.locked):not(.bought){transform:scale(.98);}
+.sh-item.locked{opacity:.32;cursor:not-allowed;}
+.sh-item.affordable{outline:1.5px solid rgba(155,111,196,.4);}
+.sh-item.bought{opacity:.38;cursor:default;}
+.sh-emoji{font-size:1.42rem;flex-shrink:0;pointer-events:none;}
+.sh-info{flex:1;text-align:left;pointer-events:none;}
+.sh-name{font-weight:800;font-size:.83rem;color:var(--text);transition:color .35s;}
+.sh-desc{font-size:.67rem;color:var(--sub);margin-top:1px;}
+.sh-right{text-align:right;flex-shrink:0;pointer-events:none;}
+.sh-cost{font-weight:800;font-size:.82rem;color:var(--purple);}
+.sh-cost.no{color:var(--muted);}
+.sh-cnt{font-size:.68rem;color:var(--purple);background:var(--lavender);border-radius:100px;padding:1px 7px;display:inline-block;margin-top:2px;}
+.sh-div{font-size:.6rem;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px 3px;display:block;}
+
+/* ====================================================
+   ONBOARDING — SPLASH + SPOTLIGHT
+==================================================== */
+
+/* SPLASH */
+.ob-splash{
+  position:fixed;inset:0;z-index:1000;
+  background:linear-gradient(160deg, #fde8ed 0%, #fff8f5 55%, #f2eaff 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
+  transition:opacity .7s ease, transform .7s ease;
+}
+.ob-splash.leave{opacity:0;transform:scale(1.04);pointer-events:none;}
+
+.ob-splash-inner{
+  text-align:center;
+  animation:rise .8s cubic-bezier(.22,1,.36,1) both;
+  padding:0 32px;
+}
+.ob-splash-emoji{
+  font-size:5rem;margin-bottom:20px;display:block;
+  animation:pulse 2s ease-in-out infinite;
+}
+.ob-splash-title{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:2.1rem;font-weight:700;color:#2d1a1f;
+  line-height:1.25;margin-bottom:14px;
+}
+.ob-splash-title span{color:var(--rose);}
+.ob-splash-sub{
+  font-size:.92rem;color:#a07080;
+  margin-bottom:36px;line-height:1.6;
+}
+.ob-splash-btn{
+  background:var(--rose);color:white;border:none;border-radius:100px;
+  padding:15px 38px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 6px 24px rgba(232,99,122,.42);
+}
+.ob-splash-btn:hover{background:var(--warm);transform:translateY(-3px);box-shadow:0 10px 32px rgba(232,99,122,.5);}
+.ob-splash-btn:active{transform:none;}
+
+.ob-dots{display:flex;gap:7px;justify-content:center;margin-top:28px;}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s,transform .3s;}
+.ob-dot.active{background:var(--rose);transform:scale(1.3);}
+
+/* SPOTLIGHT OVERLAY */
+.ob-spot{
+  position:fixed;inset:0;z-index:900;pointer-events:none;
+  opacity:0;transition:opacity .4s;
+}
+.ob-spot.visible{opacity:1;pointer-events:auto;}
+
+/* The dark mask is drawn via canvas behind the tooltip */
+.ob-canvas{position:fixed;inset:0;z-index:900;pointer-events:none;}
+
+/* tooltip popup */
+.ob-popup{
+  position:fixed;z-index:910;
+  background:white;border-radius:20px;
+  padding:20px 22px 18px;
+  width:min(300px, calc(100vw - 32px));
+  box-shadow:0 8px 40px rgba(0,0,0,.22),0 0 0 1.5px rgba(232,99,122,.18);
+  transition:opacity .4s, transform .4s;
+  opacity:0;transform:translateY(12px);
+  pointer-events:none;
+}
+.ob-popup.show{opacity:1;transform:none;pointer-events:auto;}
+.ob-popup-step{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;}
+.ob-popup-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#2d1a1f;margin-bottom:6px;line-height:1.3;}
+.ob-popup-body{font-size:.82rem;color:#a07080;line-height:1.55;margin-bottom:16px;}
+.ob-popup-footer{display:flex;align-items:center;justify-content:space-between;}
+.ob-skip{background:none;border:none;font-family:'Nunito',sans-serif;font-size:.75rem;color:#c0a0a8;cursor:pointer;padding:0;}
+.ob-skip:hover{color:var(--rose);}
+.ob-next{background:var(--rose);color:white;border:none;border-radius:100px;padding:9px 22px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:background .2s,transform .1s;box-shadow:0 4px 14px rgba(232,99,122,.36);}
+.ob-next:hover{background:var(--warm);}
+.ob-next:active{transform:scale(.96);}
+
+/* arrow pointer */
+.ob-arrow{
+  position:fixed;z-index:911;pointer-events:none;
+  font-size:1.8rem;
+  transition:opacity .4s,top .4s,left .4s;
+  animation:arrowBob .9s ease-in-out infinite;
+}
+@keyframes arrowBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* ===== NOTIF PANEL ===== */
+.notif-panel{
+  position:fixed;top:60px;left:50%;transform:translateX(-50%);
+  width:320px;max-width:calc(100vw - 32px);
+  background:var(--card);border-radius:20px;
+  box-shadow:0 8px 40px rgba(0,0,0,.18),0 0 0 1.5px var(--div);
+  z-index:800;padding:20px;
+  transition:background .35s;
+  animation:rise .35s cubic-bezier(.22,1,.36,1) both;
+}
+.notif-panel h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px;transition:color .35s;}
+.notif-panel p{font-size:.73rem;color:var(--sub);margin-bottom:16px;line-height:1.5;}
+.notif-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--div);}
+.notif-row:last-child{border-bottom:none;}
+.notif-label{font-size:.8rem;color:var(--text);font-weight:600;transition:color .35s;}
+.notif-label small{display:block;font-size:.67rem;color:var(--sub);font-weight:400;margin-top:1px;}
+/* toggle */
+.toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;border-radius:100px;background:var(--muted);transition:background .25s;cursor:pointer;}
+.toggle input:checked+.toggle-track{background:var(--rose);}
+.toggle-track::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.toggle input:checked+.toggle-track::after{transform:translateX(18px);}
+.notif-blocked{font-size:.72rem;color:#e07820;background:#fff3e0;border-radius:8px;padding:6px 10px;margin-top:10px;line-height:1.5;}
+body.dark .notif-blocked{background:#3a2808;}
+</style>
+</head>
+<body>
+
+<div class="petals" id="petals"></div>
+<div class="toast-container" id="toasts"></div>
+
+<!-- ONBOARDING SPLASH -->
+<div class="ob-splash" id="obSplash">
+  <div class="ob-splash-inner">
+    <span class="ob-splash-emoji" id="obEmoji">🌸</span>
+    <div class="ob-splash-title" id="obTitle">привет, <span id="obName">ладошка!</span></div>
+    <div class="ob-splash-sub" id="obSub">серёжа сделал для тебя кое-что<br>небольшой тур по странице?</div>
+    <button class="ob-splash-btn" id="obSplashBtn" onclick="startTour()">давай! 🐾</button>
+    <div class="ob-dots" id="obDots"></div>
+  </div>
+</div>
+
+<!-- SPOTLIGHT CANVAS -->
+<canvas class="ob-canvas" id="obCanvas"></canvas>
+
+<!-- SPOTLIGHT POPUP -->
+<div class="ob-popup" id="obPopup">
+  <div class="ob-popup-step" id="obStepLbl"></div>
+  <div class="ob-popup-title" id="obPopTitle"></div>
+  <div class="ob-popup-body" id="obPopBody"></div>
+  <div class="ob-popup-footer">
+    <button class="ob-skip" onclick="endTour()">пропустить</button>
+    <button class="ob-next" id="obNextBtn" onclick="tourNext()">дальше →</button>
+  </div>
+</div>
+<div class="ob-arrow" id="obArrow" style="opacity:0">👆</div>
+
+<!-- SPOTLIGHT DIMMER (click-through blocker area) -->
+<div class="ob-spot" id="obSpot" style="pointer-events:none;"></div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-left">
+    <button class="tb-btn" id="darkBtn" onclick="toggleDark()">🌙</button>
+    <button class="tb-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+    <button class="tb-btn" id="notifBtn" onclick="toggleNotifs()" title="уведомления">🔔</button>
+  </div>
+  <button class="fab" id="fab" onclick="openDrawer()">
+    🐾 <span id="fabN">0</span>
+  </button>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="dw-header">
+    <div><div class="dw-title">🐾 магазин мурлыков</div><div class="dw-sub">тыкай котика, трать мурлыки</div></div>
+    <button class="dw-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="dw-stats">
+    <div class="dw-stat"><div class="dw-big" id="dwN">0</div><div class="dw-lbl">мурлыков</div></div>
+    <div class="dw-stat"><div class="dw-big" id="dwCps">0</div><div class="dw-lbl">в секунду</div></div>
+    <div class="dw-stat"><div class="dw-big" id="dwClick">x1</div><div class="dw-lbl">за тык</div></div>
+  </div>
+  <div class="sh-tabs">
+    <button class="sh-tab active" id="tabB" onclick="switchTab('b')">котики и люди</button>
+    <button class="sh-tab" id="tabU" onclick="switchTab('u')">улучшения</button>
+  </div>
+  <div class="sh-body" id="shBody"></div>
+</div>
+
+<!-- NOTIF PANEL -->
+<div id="notifPanel" style="display:none;">
+  <div class="notif-panel" id="notifPanelInner">
+    <h3>🔔 уведомления</h3>
+    <p>работают когда страница открыта в браузере. нажми на уведомление — откроется эта страничка.</p>
+    <div class="notif-row">
+      <div class="notif-label">за 2 часа до конца работы<small>в 15:00 / 16:00</small></div>
+      <label class="toggle"><input type="checkbox" id="n2h" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-label">за 1 час до конца работы<small>в 16:00 / 17:00</small></div>
+      <label class="toggle"><input type="checkbox" id="n1h" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-label">завтра пятница! 🎉<small>в четверг около 18:00</small></div>
+      <label class="toggle"><input type="checkbox" id="nFri" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-label">скоро отпуск!<small>когда до отпуска 7 дней или меньше</small></div>
+      <label class="toggle"><input type="checkbox" id="nVac" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-label">мурлыки накопились 🐾<small>при достижении новых вершин</small></div>
+      <label class="toggle"><input type="checkbox" id="nMurl" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
+    </div>
+    <div id="notifBlocked" class="notif-blocked" style="display:none">браузер заблокировал уведомления. разреши их в настройках сайта и перезагрузи страницу.</div>
+  </div>
+</div>
+
+<!-- GREETING -->
+<div class="greeting-card" id="greetCard">
+  <span class="greeting-emoji" id="gEmoji">🌸</span>
+  <div class="greeting-text" id="gText">добрый день, ладошка!</div>
+  <div class="greeting-sub" id="gSub">сегодня будет хорошо</div>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card" id="mainCard">
+  <div class="cat-frame" id="catFrame" onclick="onCatClick(event)">
+    <div class="cat-loader" id="loader">🐾</div>
+    <img id="catImg" class="hidden" alt="котик"/>
+  </div>
+  <p class="click-hint">тыкай в котика!</p>
+  <div class="msg-row">
+    <div class="msg-type" id="msgType">с любовью</div>
+    <p class="message" id="message"></p>
+    <p class="sub" id="sub"></p>
+  </div>
+  <button class="btn" onclick="refreshMsg()">🔄 другое сообщение</button>
+  <p class="date-line" id="dateLine"></p>
+</div>
+
+<!-- WORK CARD -->
+<div class="side-card work-c" id="workCard"></div>
+
+<!-- VACATION CARD -->
+<div class="side-card vac-c" id="vacCard"></div>
+
+<script>
+'use strict';
+
+// ============================================================
+// MESSAGES
+// ============================================================
+const MSGS=[
+  {t:"ладошка, ты самая лучшая и это не обсуждается",s:"просто факт",c:"love"},
+  {t:"я тебя люблю больше чем этот котик любит еду",s:"а это очень много",c:"love"},
+  {t:"с тобой даже скучные дни становятся особенными",s:"серьёзно",c:"love"},
+  {t:"ладик, ты такая классная что мне до сих пор не верится",s:"мне повезло",c:"love"},
+  {t:"просто хочу чтобы ты знала что ты невероятная, лада романовна",s:"без повода",c:"love"},
+  {t:"ты лучше всех котиков вместе взятых",s:"хотя котики тоже ничего",c:"love"},
+  {t:"ладошкинс, ты делаешь мой мир теплее просто своим существованием",s:"спасибо за это",c:"love"},
+  {t:"ты моё любимое место на земле",s:"уютно и хорошо",c:"love"},
+  {t:"я думаю о тебе постоянно и мне это нравится",s:"вот так",c:"love"},
+  {t:"даже когда тебе грустно ты всё равно самая красивая",s:"это правда",c:"love"},
+  {t:"ты как солнышко только лучше",s:"потому что ты ещё и лада",c:"love"},
+  {t:"спасибо что ты есть, ладошка!",s:"правда правда",c:"love"},
+  {t:"ты самая лучшая женщина нааа свете. твоиии глаазааа",s:"такие чистые как небо",c:"love"},
+  {t:"мужчина король, а каблук его корона (твой)",s:"серёжа подтверждает",c:"love"},
+  {t:"а дома будут ждать альтуха и нефор",s:"самые пушистые",c:"love"},
+  {t:"все дураки, но не ты",s:"медицинский факт",c:"vibe"},
+  {t:"шоб сиги не кончались и выходных было больше",s:"загадываем вместе",c:"vibe"},
+  {t:"всё будет хорошо, солнышко!",s:"точно точно",c:"vibe"},
+  {t:"всё идёт так как надо, просто дыши",s:"ты справляешься",c:"vibe"},
+  {t:"сегодня хороший день потому что ты в нём есть",s:"математика не врёт",c:"vibe"},
+  {t:"ты сильнее чем думаешь, ладошка",s:"проверено",c:"vibe"},
+  {t:"на работе всё получится!",s:"ты умная и крутая",c:"hype"},
+  {t:"сегодня покажешь всем где раки зимуют",s:"вперёд!",c:"hype"},
+  {t:"ты профессионал и все это знают",s:"включая этого котика",c:"hype"},
+  {t:"скоро отпуууууск!!!!",s:"держись совсем чуть чуть",c:"hype"},
+  {t:"представь: диван, чай, никакой работы. скоро!",s:"считаем дни",c:"hype"},
+  {t:"кастую порчу на 1с, чтобы зависала и ладошка отдыхала",s:"колдуем вместе",c:"curse"},
+  {t:"1с тормозит? это я постарался. законный отдых!",s:"магия работает",c:"curse"},
+  {t:"порча на 1с активирована. теперь законный перерыв",s:"всё по науке",c:"curse"},
+];
+let lastMsgIdx=-1;
+function rnd(arr,exc){let i;do{i=Math.floor(Math.random()*arr.length);}while(arr.length>1&&i===exc);return{item:arr[i],idx:i};}
+
+function refreshMsg(){
+  const {item:m,idx}=rnd(MSGS,lastMsgIdx);lastMsgIdx=idx;
+  const el=document.getElementById('message');
+  el.style.animation='none';void el.offsetWidth;el.style.animation='';
+  el.textContent=m.t;document.getElementById('sub').textContent=m.s;
+  const t=document.getElementById('msgType');t.className='msg-type '+m.c;
+  t.textContent=m.c==='love'?'с любовью':m.c==='vibe'?'всё хорошо':m.c==='curse'?'заклинание':'вперёд!';
+  loadCat();
+}
+
+function loadCat(){
+  const img=document.getElementById('catImg'),ld=document.getElementById('loader');
+  img.classList.add('hidden');ld.classList.remove('done');
+  const show=src=>{
+    img.onload=()=>{img.classList.remove('hidden');ld.classList.add('done');};
+    img.onerror=()=>{img.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/400px-RedCat_8727.jpg';img.onload=()=>{img.classList.remove('hidden');ld.classList.add('done');};};
+    img.src=src;
+  };
+  fetch(`https://api.thecatapi.com/v1/images/search?mime_types=gif&limit=1&_=${Date.now()}`)
+    .then(r=>r.json()).then(d=>{if(d&&d[0]&&d[0].url)show(d[0].url);else throw 0;})
+    .catch(()=>show(`https://cataas.com/cat/gif?t=${Date.now()}`));
+}
+
+// ============================================================
+// GREETING
+// ============================================================
+function renderGreeting(){
+  const h=new Date().getHours();
+  const g=h>=5&&h<12?{e:'☀️',t:'доброе утро, ладошка!',s:'надеемся кофе уже есть'}:
+           h>=12&&h<17?{e:'🌸',t:'добрый день, ладошка!',s:'ты справляешься отлично'}:
+           h>=17&&h<22?{e:'🌆',t:'добрый вечер, ладошка!',s:'рабочий день позади, выдыхай'}:
+                       {e:'🌙',t:'доброй ночи, ладошка!',s:'поздно! но мы не осуждаем'};
+  document.getElementById('gEmoji').textContent=g.e;
+  document.getElementById('gText').textContent=g.t;
+  document.getElementById('gSub').textContent=g.s;
+}
+
+// splash greeting also time-based
+function setSplashGreeting(){
+  const h=new Date().getHours();
+  const g=h>=5&&h<12?{e:'☀️',name:'доброе утро, ладошка!',sub:'серёжа сделал для тебя кое-что\nнебольшой тур по странице?'}:
+           h>=12&&h<17?{e:'🌸',name:'привет, ладошка!',sub:'серёжа сделал для тебя кое-что\nнебольшой тур по странице?'}:
+           h>=17&&h<22?{e:'🌆',name:'добрый вечер, ладошка!',sub:'серёжа сделал для тебя кое-что\nнебольшой тур по странице?'}:
+                       {e:'🌙',name:'привет, ладошка!',sub:'не спишь? серёжа сделал для тебя кое-что\nнебольшой тур?'};
+  document.getElementById('obEmoji').textContent=g.e;
+  document.getElementById('obName').textContent=g.name;
+  document.getElementById('obSub').innerHTML=g.sub.replace('\n','<br>');
+}
+
+// ============================================================
+// AUDIO
+// ============================================================
+let audioCtx=null,soundOn=true;
+try{soundOn=localStorage.getItem('lada_sound')!=='0';}catch(e){}
+
+function initAudio(){if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}
+
+function snd(type){
+  if(!soundOn||!audioCtx)return;
+  const ac=audioCtx,now=ac.currentTime;
+  try{
+    if(type==='click'){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.setValueAtTime(680,now);o.frequency.exponentialRampToValueAtTime(340,now+.06);g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start(now);o.stop(now+.08);}
+    if(type==='buy'){[440,550,660].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.connect(g);g.connect(ac.destination);o.frequency.value=f;const t=now+i*.08;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.14,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+.22);o.start(t);o.stop(t+.22);});}
+    if(type==='achieve'){[523,659,784,1047].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.connect(g);g.connect(ac.destination);o.frequency.value=f;const t=now+i*.1;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+.38);o.start(t);o.stop(t+.38);});}
+    if(type==='open'){[330,440].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.connect(g);g.connect(ac.destination);o.frequency.value=f;const t=now+i*.12;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.start(t);o.stop(t+.2);});}
+    if(type==='whoosh'){const o=ac.createOscillator(),g=ac.createGain();o.type='sawtooth';o.frequency.setValueAtTime(300,now);o.frequency.exponentialRampToValueAtTime(80,now+.18);g.gain.setValueAtTime(.06,now);g.gain.exponentialRampToValueAtTime(.001,now+.2);o.connect(g);g.connect(ac.destination);o.start(now);o.stop(now+.2);}
+  }catch(e){}
+}
+
+function toggleSound(){initAudio();soundOn=!soundOn;try{localStorage.setItem('lada_sound',soundOn?'1':'0');}catch(e){}document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';if(soundOn)snd('buy');}
+
+// ============================================================
+// DARK MODE
+// ============================================================
+let dark=false;
+try{dark=localStorage.getItem('lada_dark')==='1';}catch(e){}
+function applyDark(){document.body.classList.toggle('dark',dark);document.getElementById('darkBtn').textContent=dark?'☀️':'🌙';}
+function toggleDark(){dark=!dark;try{localStorage.setItem('lada_dark',dark?'1':'0');}catch(e){}applyDark();}
+
+// ============================================================
+// CLICKER
+// ============================================================
+const SK='lada_clicker_v4';
+const BLDS=[
+  {id:'altuha',  n:'альтуха',       e:'😺', d:'мурлычет на диване',      c:15,     r:.1  },
+  {id:'nefor',   n:'нефор',         e:'🐈‍⬛',d:'топчет лапками',          c:100,    r:.6  },
+  {id:'seryozha',n:'серёжа',        e:'🧡', d:'шлёт обнимашки',         c:500,    r:3   },
+  {id:'siga',    n:'сигаретка',     e:'🚬', d:'думает о ладошке',        c:2000,   r:10  },
+  {id:'oc1',     n:'1с зависла',    e:'💾', d:'законный перерыв',        c:8000,   r:40  },
+  {id:'dream',   n:'котик во сне',  e:'💤', d:'снятся только мурлыки',   c:30000,  r:150 },
+  {id:'holiday', n:'вечный отпуск', e:'🛋️',d:'диван и больше ничего',   c:100000, r:500 },
+  {id:'purr',    n:'мурлыкопад',    e:'✨', d:'всё само мурлыкает',      c:500000, r:2000},
+];
+const UPGS=[
+  {id:'uc1',n:'острые когти',       e:'🐾',d:'тык x2',              cost:100,   t:'click',m:2,req:null},
+  {id:'uc2',n:'нежный тык',         e:'💅',d:'тык ещё x2',          cost:500,   t:'click',m:2,req:'uc1'},
+  {id:'uc3',n:'мега лапка',         e:'⚡',d:'тык x3',              cost:2000,  t:'click',m:3,req:'uc2'},
+  {id:'uc4',n:'ладошка-профи',      e:'👑',d:'тык x5',              cost:10000, t:'click',m:5,req:'uc3'},
+  {id:'uc5',n:'бесконечный тык',    e:'🌀',d:'тык x10',             cost:50000, t:'click',m:10,req:'uc4'},
+  {id:'up1',n:'пурр-пурр',          e:'😻',d:'все источники x2',   cost:1000,  t:'cps',  m:2,req:null},
+  {id:'up2',n:'уютный плед',        e:'🛌',d:'все источники x2',   cost:10000, t:'cps',  m:2,req:'up1'},
+  {id:'up3',n:'котики сговорились', e:'🐱',d:'все источники x3',   cost:50000, t:'cps',  m:3,req:'up2'},
+  {id:'up4',n:'мурлычный заговор',  e:'🌙',d:'все источники x5',   cost:200000,t:'cps',  m:5,req:'up3'},
+  {id:'ua1',n:'альтуха довольна',   e:'🥰',d:'альтуха и нефор x4', cost:300,   t:'b2',   m:4,ids:['altuha','nefor'],req:null},
+  {id:'ua2',n:'серёжа старается',   e:'💪',d:'серёжа x5',          cost:2500,  t:'b1',   m:5,bid:'seryozha',req:null},
+  {id:'ua3',n:'вторая сигаретка',   e:'✌️',d:'сигаретки x3',      cost:5000,  t:'b1',   m:3,bid:'siga',req:null},
+  {id:'ua4',n:'сон с котиком',      e:'🌟',d:'котик во сне x4',    cost:80000, t:'b1',   m:4,bid:'dream',req:null},
+];
+const ACHS=[
+  {id:'a1', f:s=>s.total>=100,     h:'первые мурлыки!',       b:'100 мурлыков. хорошее начало'},
+  {id:'a2', f:s=>s.total>=1000,    h:'уже 1000!',             b:'серёжа гордится'},
+  {id:'a3', f:s=>s.total>=10000,   h:'мурлыковый богач',      b:'десять тысяч'},
+  {id:'a4', f:s=>s.total>=100000,  h:'мурлыковый магнат',     b:'сто тысяч!'},
+  {id:'a5', f:s=>s.total>=1e6,     h:'мурлыкомиллионер!',     b:'миллион. ладошка победила'},
+  {id:'a6', f:s=>s.clicks>=100,    h:'100 тыков',             b:'котик очень доволен'},
+  {id:'a7', f:s=>s.clicks>=1000,   h:'1000 тыков',            b:'профессиональный тыкатель'},
+  {id:'a8', f:s=>s.clicks>=10000,  h:'10 000 тыков',          b:'абсолютный чемпион'},
+  {id:'a9', f:s=>own(s)>=1,        h:'первый котик!',         b:'магазин открыт'},
+  {id:'a10',f:s=>own(s)>=10,       h:'котовый двор',          b:'десять штук'},
+  {id:'a11',f:s=>own(s)>=50,       h:'котовый завод',         b:'пятьдесят! победа'},
+  {id:'a12',f:s=>s.b.oc1>=1,       h:'1с снова зависла',      b:'заклинание сработало!'},
+  {id:'a13',f:s=>s.b.seryozha>=5,  h:'серёж много не бывает', b:'пять серёж'},
+];
+function own(s){return Object.values(s.b).reduce((a,v)=>a+v,0);}
+
+let S={m:0,total:0,clicks:0,b:{},u:{},a:{}};
+BLDS.forEach(b=>S.b[b.id]=0);UPGS.forEach(u=>S.u[u.id]=false);ACHS.forEach(a=>S.a[a.id]=false);
+
+function loadS(){
+  try{
+    const raw=localStorage.getItem(SK);if(!raw)return;
+    const sv=JSON.parse(raw);
+    S.m=sv.m||0;S.total=sv.total||0;S.clicks=sv.clicks||0;
+    BLDS.forEach(b=>{S.b[b.id]=sv.b?.[b.id]||0;});
+    UPGS.forEach(u=>{S.u[u.id]=sv.u?.[u.id]||false;});
+    ACHS.forEach(a=>{S.a[a.id]=sv.a?.[a.id]||false;});
+    if(sv.ts){const secs=Math.min((Date.now()-sv.ts)/1000,8*3600);const earned=getCps()*secs;if(earned>=1){S.m+=earned;S.total+=earned;}if(earned>=50)setTimeout(()=>toast('пока тебя не было...','накопилось '+fmt(earned)+' мурлыков!'),2500);}
+  }catch(e){}
+}
+function saveS(){try{localStorage.setItem(SK,JSON.stringify({...S,ts:Date.now()}));}catch(e){}}
+
+function bCost(b){return Math.round(b.c*Math.pow(1.15,S.b[b.id]));}
+function getClick(){let p=1;UPGS.forEach(u=>{if(u.t==='click'&&S.u[u.id])p*=u.m;});return p;}
+function getCps(){let cm=1;UPGS.forEach(u=>{if(u.t==='cps'&&S.u[u.id])cm*=u.m;});let total=0;BLDS.forEach(b=>{if(!S.b[b.id])return;let m=cm;UPGS.forEach(u=>{if(!S.u[u.id])return;if(u.t==='b1'&&u.bid===b.id)m*=u.m;if(u.t==='b2'&&u.ids.includes(b.id))m*=u.m;});total+=b.r*S.b[b.id]*m;});return total;}
+function fmt(n){if(n>=1e12)return(n/1e12).toFixed(2)+'Т';if(n>=1e9)return(n/1e9).toFixed(2)+'Г';if(n>=1e6)return(n/1e6).toFixed(2)+'М';if(n>=1e3)return(n/1e3).toFixed(1)+'К';return Math.floor(n).toString();}
+
+let curTab='b';
+function updateUI(){
+  const m=fmt(S.m);document.getElementById('fabN').textContent=m;document.getElementById('dwN').textContent=m;document.getElementById('dwCps').textContent=fmt(getCps());document.getElementById('dwClick').textContent='x'+getClick();renderShop();
+}
+function renderShop(){document.getElementById('shBody').innerHTML=curTab==='b'?BLDS.map(bldHtml).join(''):upgsHtml();}
+function bldHtml(b){const n=S.b[b.id],cost=bCost(b),can=S.m>=cost,cps=n>0?` (+${fmt(b.r*n)}/c)`:'';return`<div class="sh-item ${can?'affordable':'locked'}" onclick="buyBld('${b.id}')"><span class="sh-emoji">${b.e}</span><div class="sh-info"><div class="sh-name">${b.n}</div><div class="sh-desc">${b.d}${cps}</div></div><div class="sh-right"><div class="sh-cost ${can?'':'no'}">${fmt(cost)}</div>${n?`<div class="sh-cnt">x${n}</div>`:''}</div></div>`;}
+function upgsHtml(){const cl=UPGS.filter(u=>u.t==='click'),ps=UPGS.filter(u=>u.t!=='click');return'<span class="sh-div">улучшения тыка</span>'+cl.map(upgHtml).join('')+'<span class="sh-div">пассивный доход</span>'+ps.map(upgHtml).join('');}
+function upgHtml(u){const bought=S.u[u.id],can=S.m>=u.cost,reqOk=!u.req||S.u[u.req],cls=bought?'bought':(!can||!reqOk)?'locked':'affordable',hint=u.req&&!S.u[u.req]?' (нужно купить предыдущее)':'';return`<div class="sh-item ${cls}" onclick="buyUpg('${u.id}')"><span class="sh-emoji">${u.e}</span><div class="sh-info"><div class="sh-name">${u.n}</div><div class="sh-desc">${u.d}${hint}</div></div><div class="sh-right"><div class="sh-cost ${!can&&!bought?'no':''}">${bought?'✓':fmt(u.cost)}</div></div></div>`;}
+function switchTab(t){curTab=t;document.getElementById('tabB').classList.toggle('active',t==='b');document.getElementById('tabU').classList.toggle('active',t==='u');renderShop();}
+function buyBld(id){const b=BLDS.find(x=>x.id===id),cost=bCost(b);if(S.m<cost)return;initAudio();snd('buy');S.m-=cost;S.b[id]++;checkAchs();updateUI();saveS();}
+function buyUpg(id){const u=UPGS.find(x=>x.id===id);if(!u||S.u[id]||S.m<u.cost)return;if(u.req&&!S.u[u.req])return;initAudio();snd('buy');S.m-=u.cost;S.u[id]=true;checkAchs();updateUI();saveS();}
+
+const FLOATS=['+мурлык','🐾','🌸','💖','✨','пурр','лапка','мрр'];
+function onCatClick(e){
+  if(e && e.preventDefault) e.preventDefault();
+  initAudio();snd('click');
+  const pow=getClick();S.m+=pow;S.total+=pow;S.clicks++;
+  const t=document.createElement('div');t.className='float-thing';
+  t.textContent=pow>=10?`+${fmt(pow)} 🐾`:(Math.random()<.3?FLOATS[Math.floor(Math.random()*FLOATS.length)]:`+${pow}`);
+  const src = e ? (e.changedTouches ? e.changedTouches[0] : (e.touches ? e.touches[0] : e)) : {clientX: window.innerWidth/2, clientY: window.innerHeight/2};
+  t.style.left=(src.clientX-14)+'px';t.style.top=(src.clientY-8)+'px';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),850);
+  checkAchs();updateUI();
+}
+
+let lastT=Date.now();
+function tick(){const now=Date.now(),dt=(now-lastT)/1000;lastT=now;const g=getCps()*dt;S.m+=g;S.total+=g;updateUI();checkAchs();checkMurlykiNotif();}
+function checkAchs(){ACHS.forEach(a=>{if(S.a[a.id])return;if(a.f(S)){S.a[a.id]=true;toast(a.h,a.b);snd('achieve');}});}
+function toast(title,body){const el=document.createElement('div');el.className='toast';el.innerHTML=`<div class="toast-title">🏅 ${title}</div><div class="toast-body">${body}</div>`;document.getElementById('toasts').appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},3500);}
+
+function openDrawer(){initAudio();snd('open');document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+
+// ============================================================
+// PETALS
+// ============================================================
+const PE=['🌸','🌺','✿','🌼','💮'],PC=document.getElementById('petals');
+for(let i=0;i<18;i++){const p=document.createElement('div');p.className='petal';p.textContent=PE[Math.floor(Math.random()*PE.length)];p.style.left=Math.random()*100+'vw';p.style.animationDuration=(6+Math.random()*9)+'s';p.style.animationDelay=(Math.random()*12)+'s';p.style.fontSize=(.8+Math.random()*.8)+'rem';PC.appendChild(p);}
+
+// ============================================================
+// WORK TRACKER
+// ============================================================
+function renderWork(){
+  const card=document.getElementById('workCard'),now=new Date(),day=now.getDay(),we=day===0||day===6;
+  card.innerHTML=`<div class="tracker-header"><span class="tracker-icon">💼</span><h2><small style="color:#d4a0aa">трекер</small>рабочий день</h2></div>`+(we?wkWE(day):wkDay(now,day));
+  if(!we){const p=wkPct(now,day);setTimeout(()=>{const b=document.getElementById('wBar');if(b)b.style.width=Math.min(100,Math.max(2,p))+'%';},300);}
+}
+function wkEnd(d){return d===5?{h:17}:{h:18};}
+function wkPct(now,day){const e=wkEnd(day),s=540,en=e.h*60,n=now.getHours()*60+now.getMinutes();if(n<=s)return 0;if(n>=en)return 100;return Math.round((n-s)/(en-s)*100);}
+function wkDay(now,day){const e=wkEnd(day),es=`${e.h}:00`,n=now.getHours()*60+now.getMinutes(),en=e.h*60,s=540,fri=day===5;if(n<s)return`<p class="t-msg">${fri?'пятница!':'рабочий день'} ещё не начался ☕</p><p class="t-sub">сегодня до ${es}${fri?' 🎉':''}</p>`;if(n>=en)return`<p class="t-msg">рабочий день окончен! 🎉</p><p class="t-sub">ладошка свободна, ура!</p>`;const left=en-n,h=Math.floor(left/60),m=left%60,ls=h>0?`${h} ч ${m} мин`:`${left} мин`,p=wkPct(now,day),hype=p>=90?'финишная прямая!':p>=70?'чуть-чуть осталось!':p>=50?'больше половины!':p>=25?'потихоньку!':'держимся!';return`<div class="work-pw"><div class="work-pb" id="wBar" style="width:2%"></div></div><div class="t-stats"><span>09:00</span><span>${p}% дня</span><span>${es}${fri?' 🎉':''}</span></div><div class="t-info">${fri?'🎉 пятница! ':''}конец в <strong>${es}</strong>, осталось <strong>${ls}</strong> — ${hype}</div>`;}
+function wkWE(day){return`<p class="t-msg">${day===0?'воскресенье':'суббота'}, отдыхаем! 🛋️</p><p class="t-sub">никакой работы, только котики и чай</p>`;}
+
+// ============================================================
+// VACATION TRACKER
+// ============================================================
+const VK='lada_vacation_date';
+function getVD(){try{return localStorage.getItem(VK)||'';}catch(e){return '';}}
+function setVD(v){try{localStorage.setItem(VK,v);}catch(e){}}
+function renderVacation(){
+  const card=document.getElementById('vacCard'),stored=getVD();
+  const hdr=`<div class="tracker-header"><span class="tracker-icon">🏠</span><h2><small style="color:#9ca">трекер</small>до отпуска</h2></div>`;
+  if(!stored){card.innerHTML=hdr+`<div class="no-vac"><p>когда отпуск? введи дату и считаем вместе!</p></div><div class="date-edit open" id="dEdit"><label>дата начала отпуска</label><input type="date" id="vIn"/><button class="save-btn" onclick="saveDate()">сохранить</button></div>`;return;}
+  const vd=new Date(stored);vd.setHours(0,0,0,0);const today=new Date();today.setHours(0,0,0,0);const dl=Math.ceil((vd-today)/864e5);let content='';
+  if(dl<=0){content=`<div style="text-align:center;padding:8px 0"><div style="font-size:2.1rem;margin-bottom:8px">🎉</div><p class="t-msg">отпуск уже настал!</p><p class="t-sub" style="margin-top:4px">ладошка заслужила!</p></div>`;}
+  else{const sk='lada_vac_set';let sd;try{sd=localStorage.getItem(sk);}catch(e){}if(!sd){const d=today.toISOString().slice(0,10);try{localStorage.setItem(sk,d);sd=d;}catch(e){}}const start=new Date(sd||today);start.setHours(0,0,0,0);const tot=Math.max(1,Math.ceil((vd-start)/864e5));const pct=Math.min(100,Math.max(2,Math.round(((tot-dl)/tot)*100)));const vs=vd.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});const hy=dl===1?'завтра!!!! 🎉':dl<=3?'уже совсем скоро!':dl<=7?'одна неделька!':dl<=14?'две недельки!':'держимся, ладошка!';content=`<div class="days-left" style="text-align:center;margin-bottom:8px"><span class="days-n">${dl}</span><span class="days-l">${dl===1?'день':dl<5?'дня':'дней'} до отпуска</span></div><div style="height:8px"></div><div class="vac-pw"><div class="vac-pb" id="vBar" style="width:2%"></div></div><div class="t-stats"><span>начали считать</span><span>${pct}% пути</span><span>отпуск!</span></div><div class="vac-info">🗓 ${vs} — ${hy}</div>`;setTimeout(()=>{const b=document.getElementById('vBar');if(b)b.style.width=pct+'%';},200);}
+  card.innerHTML=hdr+content+`<div style="text-align:center"><button class="edit-btn" onclick="toggleDE()">изменить дату</button></div><div class="date-edit" id="dEdit"><label>новая дата отпуска</label><input type="date" id="vIn" value="${stored}"/><button class="save-btn" onclick="saveDate()">сохранить</button></div>`;
+}
+function toggleDE(){document.getElementById('dEdit').classList.toggle('open');}
+function saveDate(){const v=document.getElementById('vIn').value;if(!v)return;setVD(v);try{localStorage.removeItem('lada_vac_set');}catch(e){}renderVacation();}
+
+// ============================================================
+// SPOTLIGHT TOUR
+// ============================================================
+const TOUR_STEPS = [
+  {
+    targetId: 'mainCard',
+    step: 'шаг 1 из 4',
+    title: 'вот тут мои пожелания тебе 🌸',
+    body: 'каждый раз разные. тыкай в котика или жми кнопку — появится новое. котика тоже можно тыкать просто так, он любит.',
+    arrow: 'down',
+    nextLabel: 'дальше →',
+  },
+  {
+    targetId: 'workCard',
+    step: 'шаг 2 из 4',
+    title: 'а тут смотри сколько до конца работы 💼',
+    body: 'прогресс-бар рабочего дня с 9 утра. в пятницу до 17:00, в остальные дни до 18:00. в выходные — другое сообщение.',
+    arrow: 'down',
+    nextLabel: 'дальше →',
+  },
+  {
+    targetId: 'vacCard',
+    step: 'шаг 3 из 4',
+    title: 'а тут считаем дни до отпуска 🏠',
+    body: 'введи дату начала отпуска и страничка будет его ждать вместе с тобой. ну и подбадривать по дороге.',
+    arrow: 'down',
+    nextLabel: 'дальше →',
+  },
+  {
+    targetId: 'fab',
+    step: 'шаг 4 из 4',
+    title: 'а вот эта кнопка — это кликер 🐾',
+    body: 'нажми на неё — откроется магазин мурлыков. тыкай в котика, копи мурлыки, покупай котиков и людей. классика.',
+    arrow: 'left',
+    nextLabel: 'всё понятно! 🎉',
+  },
+];
+
+let tourStep = 0;
+let tourActive = false;
+let canvasRAF = null;
+let spotTarget = null; // current DOMRect
+
+function startTour() {
+  initAudio(); snd('whoosh');
+  // dismiss splash
+  const splash = document.getElementById('obSplash');
+  splash.classList.add('leave');
+  setTimeout(()=>{ splash.style.display='none'; }, 750);
+
+  tourActive = true;
+  tourStep = 0;
+
+  // init canvas
+  const cv = document.getElementById('obCanvas');
+  cv.style.display = '';
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  window.addEventListener('resize', resizeCanvas);
+
+  document.getElementById('obSpot').style.pointerEvents = 'auto';
+
+  showTourStep(0);
+  drawLoop();
+}
+
+function resizeCanvas(){
+  const cv=document.getElementById('obCanvas');
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+}
+
+function showTourStep(idx){
+  const step = TOUR_STEPS[idx];
+  const target = document.getElementById(step.targetId);
+
+  // scroll target into view first
+  target.scrollIntoView({behavior:'smooth', block:'center'});
+
+  setTimeout(()=>{
+    const rect = target.getBoundingClientRect();
+    spotTarget = rect;
+
+    // update popup content
+    document.getElementById('obStepLbl').textContent = step.step;
+    document.getElementById('obPopTitle').textContent = step.title;
+    document.getElementById('obPopBody').textContent = step.body;
+    document.getElementById('obNextBtn').textContent = step.nextLabel;
+
+    // update dots
+    updateDots(idx);
+
+    // position popup
+    positionPopup(rect, step.arrow);
+
+    // show popup
+    const popup = document.getElementById('obPopup');
+    popup.classList.remove('show');
+    void popup.offsetWidth;
+    setTimeout(()=>popup.classList.add('show'), 80);
+
+    // arrow
+    positionArrow(rect, step.arrow);
+
+    initAudio(); snd('open');
+  }, 350);
+}
+
+function positionPopup(rect, arrow){
+  const popup = document.getElementById('obPopup');
+  const pw = Math.min(300, window.innerWidth - 32);
+  const ph = 220; // approx
+  const margin = 16;
+  const vw = window.innerWidth, vh = window.innerHeight;
+
+  let top, left;
+
+  // try below
+  if (rect.bottom + ph + 60 < vh) {
+    top = rect.bottom + 18;
+  } else {
+    top = rect.top - ph - 18;
+  }
+  // center horizontally on target, clamp to screen
+  left = rect.left + rect.width/2 - pw/2;
+  left = Math.max(margin, Math.min(vw - pw - margin, left));
+  top = Math.max(margin + 52, Math.min(vh - ph - margin, top));
+
+  // fab is top-right corner — put popup below-left
+  if (rect.top < 100) {
+    top = rect.bottom + 14;
+    left = Math.max(margin, vw - pw - margin);
+  }
+
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+  popup.style.width = pw + 'px';
+}
+
+function positionArrow(rect, direction){
+  const arr = document.getElementById('obArrow');
+  arr.style.opacity = '1';
+  let top, left;
+
+  if(rect.top < 100){ // fab in corner
+    arr.textContent = '👆';
+    top = rect.bottom + 4;
+    left = rect.left + rect.width/2 - 16;
+    arr.style.transform = '';
+  } else {
+    arr.textContent = '👆';
+    top = rect.bottom + 4;
+    left = rect.left + rect.width/2 - 16;
+    arr.style.transform = '';
+  }
+  arr.style.top = top + 'px';
+  arr.style.left = left + 'px';
+}
+
+function updateDots(idx){
+  let dotsEl = document.getElementById('obDots');
+  if(!dotsEl.children.length){
+    TOUR_STEPS.forEach((_,i)=>{
+      const d=document.createElement('div');d.className='ob-dot';dotsEl.appendChild(d);
+    });
+  }
+  [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+function tourNext(){
+  if(tourStep < TOUR_STEPS.length - 1){
+    tourStep++;
+    const popup=document.getElementById('obPopup');popup.classList.remove('show');
+    document.getElementById('obArrow').style.opacity='0';
+    spotTarget=null;
+    setTimeout(()=>showTourStep(tourStep),200);
+  } else {
+    endTour();
+  }
+}
+
+function endTour(){
+  if(!tourActive) return; // guard: prevent multiple calls
+  tourActive=false;
+  spotTarget=null;
+  const popup=document.getElementById('obPopup');
+  popup.classList.remove('show');
+  document.getElementById('obArrow').style.opacity='0';
+  document.getElementById('obSpot').style.pointerEvents='none';
+
+  const cv=document.getElementById('obCanvas');
+  const ctx=cv.getContext('2d');
+  // fade out canvas
+  let alpha=0.65;
+  const fade=()=>{alpha-=.04;if(alpha<=0){ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';if(canvasRAF){cancelAnimationFrame(canvasRAF);canvasRAF=null;}window.removeEventListener('resize',resizeCanvas);return;}ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle=`rgba(0,0,0,${alpha})`;ctx.fillRect(0,0,cv.width,cv.height);requestAnimationFrame(fade);};
+  fade();
+
+  try{localStorage.setItem('lada_ob3','1');}catch(e){}
+
+  setTimeout(()=>snd('achieve'),200);
+  setTimeout(()=>toast('добро пожаловать!','твоя страничка готова 🌸'),400);
+}
+
+// canvas draw loop — spotlight
+function drawLoop(){
+  const cv=document.getElementById('obCanvas');
+  const ctx=cv.getContext('2d');
+  if(!tourActive){ctx.clearRect(0,0,cv.width,cv.height);return;}
+
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle='rgba(0,0,0,0.62)';
+  ctx.fillRect(0,0,cv.width,cv.height);
+
+  if(spotTarget){
+    const r=spotTarget, pad=12, radius=18;
+    ctx.save();
+    ctx.globalCompositeOperation='destination-out';
+    ctx.beginPath();
+    const x=r.left-pad, y=r.top-pad, w=r.width+pad*2, h=r.height+pad*2;
+    ctx.moveTo(x+radius, y);
+    ctx.arcTo(x+w,y, x+w,y+h, radius);
+    ctx.arcTo(x+w,y+h, x,y+h, radius);
+    ctx.arcTo(x,y+h, x,y, radius);
+    ctx.arcTo(x,y, x+w,y, radius);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  canvasRAF = requestAnimationFrame(drawLoop);
+}
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+const NOTIF_KEY = 'lada_notifs_v1';
+const NOTIF_SENT_KEY = 'lada_notif_sent';
+
+let notifSettings = {n2h:false, n1h:false, nFri:false, nVac:false, nMurl:false};
+let notifPermission = 'default'; // 'default'|'granted'|'denied'
+let swRegistration = null;
+let notifTimers = [];
+let notifPanelOpen = false;
+let murlyMilestoneNext = 1000; // next murlyki threshold for notification
+
+// --- Service Worker (blob) for notification click -> open page ---
+const PAGE_URL = location.href;
+const SW_CODE = `
+self.addEventListener('notificationclick', function(e) {
+  e.notification.close();
+  var url = (e.notification.data && e.notification.data.url) || '${PAGE_URL}';
+  e.waitUntil(
+    clients.matchAll({type:'window',includeUncontrolled:true}).then(function(wins) {
+      for(var i=0;i<wins.length;i++){
+        if(wins[i].url===url && 'focus' in wins[i]) return wins[i].focus();
+      }
+      if(clients.openWindow) return clients.openWindow(url);
+    })
+  );
+});
+self.addEventListener('push', function(){});
+`;
+
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    const blob = new Blob([SW_CODE], {type: 'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl, {scope: './'})
+      .then(reg => { swRegistration = reg; })
+      .catch(() => {}); // silently fail on file:// protocol
+  } catch(e) {}
+}
+
+function loadNotifSettings() {
+  try {
+    const raw = localStorage.getItem(NOTIF_KEY);
+    if (raw) notifSettings = {...notifSettings, ...JSON.parse(raw)};
+  } catch(e) {}
+  // restore murlyki milestone
+  try {
+    const m = localStorage.getItem('lada_murl_milestone');
+    if (m) murlyMilestoneNext = parseFloat(m);
+  } catch(e) {}
+}
+
+function saveNotifSettings() {
+  const ids = ['n2h','n1h','nFri','nVac','nMurl'];
+  ids.forEach(id => {
+    notifSettings[id] = document.getElementById(id)?.checked || false;
+  });
+  try { localStorage.setItem(NOTIF_KEY, JSON.stringify(notifSettings)); } catch(e) {}
+  scheduleNotifs();
+}
+
+function applyNotifSettingsToUI() {
+  const ids = ['n2h','n1h','nFri','nVac','nMurl'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = notifSettings[id];
+  });
+}
+
+async function requestNotifPermission() {
+  if (!('Notification' in window)) return 'unsupported';
+  if (Notification.permission === 'granted') return 'granted';
+  if (Notification.permission === 'denied') return 'denied';
+  const result = await Notification.requestPermission();
+  return result;
+}
+
+async function toggleNotifs() {
+  notifPanelOpen = !notifPanelOpen;
+  const panel = document.getElementById('notifPanel');
+  panel.style.display = notifPanelOpen ? 'block' : 'none';
+  document.getElementById('notifBtn').textContent = notifPanelOpen ? '🔕' : '🔔';
+
+  if (notifPanelOpen) {
+    // request permission when opening panel
+    if ('Notification' in window) {
+      const perm = await requestNotifPermission();
+      notifPermission = perm;
+      updateNotifBlockedUI();
+      if (perm === 'granted') {
+        registerSW();
+        scheduleNotifs();
+      }
+    } else {
+      document.getElementById('notifBlocked').style.display = 'block';
+      document.getElementById('notifBlocked').textContent = 'уведомления не поддерживаются в этом браузере.';
+    }
+
+    // close panel if clicking outside
+    setTimeout(() => {
+      document.addEventListener('click', closePanelOutside);
+    }, 50);
+  } else {
+    document.removeEventListener('click', closePanelOutside);
+  }
+}
+
+function closePanelOutside(e) {
+  const panel = document.getElementById('notifPanelInner');
+  const btn = document.getElementById('notifBtn');
+  if (panel && !panel.contains(e.target) && e.target !== btn) {
+    notifPanelOpen = false;
+    document.getElementById('notifPanel').style.display = 'none';
+    document.getElementById('notifBtn').textContent = '🔔';
+    document.removeEventListener('click', closePanelOutside);
+  }
+}
+
+function updateNotifBlockedUI() {
+  const el = document.getElementById('notifBlocked');
+  if (notifPermission === 'denied') {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function sendNotif(title, body, tag) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    const opts = {
+      body, tag, icon: '🌸',
+      badge: '🌸',
+      data: { url: PAGE_URL }
+    };
+    if (swRegistration && swRegistration.showNotification) {
+      swRegistration.showNotification(title, opts);
+    } else {
+      new Notification(title, opts);
+    }
+  } catch(e) {}
+}
+
+function clearNotifTimers() {
+  notifTimers.forEach(t => clearTimeout(t));
+  notifTimers = [];
+}
+
+function msUntil(h, m) {
+  const now = new Date();
+  const target = new Date();
+  target.setHours(h, m || 0, 0, 0);
+  let diff = target - now;
+  if (diff < 0) diff += 24 * 3600 * 1000; // next day
+  return diff;
+}
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function wasSentToday(tag) {
+  try {
+    const raw = localStorage.getItem(NOTIF_SENT_KEY);
+    const sent = raw ? JSON.parse(raw) : {};
+    return sent[tag] === todayKey();
+  } catch(e) { return false; }
+}
+
+function markSent(tag) {
+  try {
+    const raw = localStorage.getItem(NOTIF_SENT_KEY);
+    const sent = raw ? JSON.parse(raw) : {};
+    sent[tag] = todayKey();
+    localStorage.setItem(NOTIF_SENT_KEY, JSON.stringify(sent));
+  } catch(e) {}
+}
+
+function scheduleNotifs() {
+  clearNotifTimers();
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+  const now = new Date();
+  const day = now.getDay(); // 0=sun,1=mon...5=fri,6=sat
+  const isWeekday = day >= 1 && day <= 5;
+  const isFriday = day === 5;
+  const isThursday = day === 4;
+
+  // 2h before end of work
+  if (notifSettings.n2h && isWeekday) {
+    const endH = isFriday ? 17 : 18;
+    const notifH = endH - 2; // 15 or 16
+    const ms = msUntil(notifH, 0);
+    if (ms < 23 * 3600 * 1000) { // only schedule if within today
+      const t = setTimeout(() => {
+        if (!wasSentToday('2h')) {
+          sendNotif('почти финишная прямая! 💼', `до конца работы осталось 2 часа. держимся!`, '2h');
+          markSent('2h');
+        }
+      }, ms);
+      notifTimers.push(t);
+    }
+  }
+
+  // 1h before end of work
+  if (notifSettings.n1h && isWeekday) {
+    const endH = isFriday ? 17 : 18;
+    const notifH = endH - 1; // 16 or 17
+    const ms = msUntil(notifH, 0);
+    if (ms < 23 * 3600 * 1000) {
+      const t = setTimeout(() => {
+        if (!wasSentToday('1h')) {
+          const msg = isFriday ? 'один час до свободы! и это же пятница!' : 'остался всего один час! финишная прямая!';
+          sendNotif('час до конца! 🎉', msg, '1h');
+          markSent('1h');
+        }
+      }, ms);
+      notifTimers.push(t);
+    }
+  }
+
+  // Tomorrow is Friday (send Thursday ~17:50 or whenever page is open on Thursday)
+  if (notifSettings.nFri && isThursday) {
+    if (!wasSentToday('fri')) {
+      // send at 17:50 on Thursday (or now if already past)
+      const ms = msUntil(17, 50);
+      if (ms < 8 * 3600 * 1000) { // within next 8h = today
+        const t = setTimeout(() => {
+          sendNotif('завтра пятница! 🎉', 'совсем немного осталось. завтра до 17:00 и всё!', 'fri');
+          markSent('fri');
+        }, ms);
+        notifTimers.push(t);
+      }
+    }
+  }
+
+  // Vacation soon (check once on page load, fire after short delay if needed)
+  if (notifSettings.nVac) {
+    const stored = getVD();
+    if (stored && !wasSentToday('vac')) {
+      const vd = new Date(stored); vd.setHours(0,0,0,0);
+      const today = new Date(); today.setHours(0,0,0,0);
+      const daysLeft = Math.ceil((vd - today) / 864e5);
+      if (daysLeft > 0 && daysLeft <= 7) {
+        const t = setTimeout(() => {
+          const msg = daysLeft === 1 ? 'завтра отпуск!!!! ладошка заслужила!' : `до отпуска ${daysLeft} ${daysLeft<5?'дня':'дней'}. уже совсем скоро!`;
+          sendNotif('скоро отпуск! 🏠', msg, 'vac');
+          markSent('vac');
+        }, 5000); // 5 sec after page load
+        notifTimers.push(t);
+      }
+    }
+  }
+}
+
+// Called from clicker tick when murlyki pass milestones
+function checkMurlykiNotif() {
+  if (!notifSettings.nMurl) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  if (S.total >= murlyMilestoneNext) {
+    sendNotif('мурлыки накопились! 🐾', `уже ${fmt(S.total)} мурлыков. можно зайти в магазин!`, 'murl_' + murlyMilestoneNext);
+    murlyMilestoneNext = murlyMilestoneNext < 5000 ? murlyMilestoneNext * 5 :
+                         murlyMilestoneNext < 50000 ? murlyMilestoneNext * 2 :
+                         murlyMilestoneNext * 3;
+    try { localStorage.setItem('lada_murl_milestone', murlyMilestoneNext); } catch(e) {}
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadS(); applyDark();
+if(!soundOn) document.getElementById('soundBtn').textContent='🔇';
+
+// notifications
+loadNotifSettings();
+applyNotifSettingsToUI();
+if('Notification' in window && Notification.permission === 'granted') {
+  notifPermission = 'granted';
+  registerSW();
+  scheduleNotifs();
+}
+
+renderGreeting(); refreshMsg(); renderWork(); renderVacation(); updateUI();
+document.getElementById('dateLine').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+
+setSplashGreeting();
+
+// Touch handler for cat — reliable on all mobile browsers
+(function(){
+  const frame = document.getElementById('catFrame');
+  let touchHandled = false;
+  frame.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    touchHandled = true;
+    onCatClick(e);
+  }, {passive: false});
+  frame.addEventListener('click', function(e){
+    if(touchHandled){ touchHandled = false; return; } // already handled by touchstart
+    onCatClick(e);
+  });
+  // Remove onclick attribute to avoid double-fire
+  frame.removeAttribute('onclick');
+})();
+
+// check if first visit
+const obDone = localStorage.getItem('lada_ob3');
+if(obDone){
+  // returning visitor — hide splash immediately, ensure tour overlay is off
+  document.getElementById('obSplash').style.display='none';
+  document.getElementById('obSpot').style.pointerEvents='none';
+  document.getElementById('obCanvas').style.display='none';
+}
+
+setInterval(tick,200);
+setInterval(saveS,10000);
+setInterval(renderWork,60000);
+</script>
+</body>
+</html>
