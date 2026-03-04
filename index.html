@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>для ладошки 🌸</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -14,11 +14,14 @@
   --rose:#e8637a;--blush:#fde8ed;--warm:#c04060;
   --mint:#e8f5f0;--green:#4caf89;
   --purple:#9b6fc4;--lavender:#f2eaff;
+  --teal:#5bc4b8;--teal-bg:#e8f9f7;
+  --orange:#f0874a;--orange-bg:#fff0e8;
   --sh1:rgba(232,99,122,.14);--sh2:rgba(76,175,137,.12);
 }
 body.dark{
   --bg:#16100d;--card:#1f1510;--text:#f0dde2;--sub:#9a7080;--muted:#4a3038;--div:rgba(255,255,255,.07);
   --warm:#e87a8a;--blush:#36181e;--mint:#0d1e16;--lavender:#1e1428;
+  --teal-bg:#0d1e1c;--orange-bg:#2a1a0e;
   --sh1:rgba(0,0,0,.5);--sh2:rgba(0,0,0,.5);
 }
 
@@ -27,11 +30,9 @@ body{
   min-height:100vh;background:var(--bg);color:var(--text);
   font-family:'Nunito',sans-serif;
   display:flex;flex-direction:column;align-items:center;
-  padding:62px 16px 48px;gap:14px;
+  padding:62px 16px calc(90px + env(safe-area-inset-bottom, 0px));gap:0;
   transition:background .35s,color .35s;overflow-x:hidden;
 }
-
-/* Improve touch responsiveness on iOS Safari */
 button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 
 .petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
@@ -41,10 +42,40 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 @keyframes rise{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 @keyframes fadeMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-65px) scale(1.2)}}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.3)}}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
 @keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
 @keyframes blink{0%,100%{opacity:.38}50%{opacity:1}}
+
+/* Click effects */
+@keyframes catBounce{
+  0%{transform:scale(1);}
+  18%{transform:scale(.86) rotate(-4deg);}
+  48%{transform:scale(1.14) rotate(2deg);}
+  72%{transform:scale(.97) rotate(-1deg);}
+  100%{transform:scale(1) rotate(0);}
+}
+@keyframes rippleRing{
+  0%{transform:scale(.7);opacity:.9;}
+  100%{transform:scale(1.55);opacity:0;}
+}
+@keyframes particlePop{
+  0%{opacity:1;transform:translate(0,0) scale(1.2);}
+  100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0.4);}
+}
+@keyframes comboFlash{
+  0%{transform:scale(.8);opacity:0;}
+  40%{transform:scale(1.15);opacity:1;}
+  100%{transform:scale(1);opacity:1;}
+}
+@keyframes tamaStatBounce{
+  0%,100%{transform:scaleX(1);}
+  50%{transform:scaleX(1.02);}
+}
+@keyframes heartFloat{
+  0%{opacity:1;transform:translateY(0) scale(1);}
+  100%{opacity:0;transform:translateY(-90px) scale(1.4);}
+}
 
 /* ===== TOP BAR ===== */
 .top-bar{position:fixed;top:0;left:0;right:0;height:52px;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:var(--card);border-bottom:1px solid var(--div);transition:background .35s;}
@@ -55,6 +86,29 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 .fab{display:flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--blush);border-radius:20px;padding:7px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.83rem;color:var(--warm);box-shadow:0 4px 16px var(--sh1);transition:transform .15s,box-shadow .15s,background .35s;user-select:none;}
 .fab:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--sh1);}
 .fab:active{transform:scale(.95);}
+
+/* ===== BOTTOM TABS ===== */
+.bottom-tabs{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(58px + env(safe-area-inset-bottom, 0px));
+  background:var(--card);border-top:1px solid var(--div);
+  display:flex;z-index:300;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  transition:background .35s;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.bt-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:none;background:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:700;
+  color:var(--sub);gap:3px;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:color .2s;
+  padding-top:8px;padding-bottom:8px;
+}
+.bt-tab .bt-icon{font-size:1.4rem;line-height:1;transition:transform .2s;}
+.bt-tab.active{color:var(--rose);}
+.bt-tab.active .bt-icon{transform:scale(1.18);}
 
 /* ===== TOAST ===== */
 .toast-container{position:fixed;top:60px;right:14px;z-index:2000;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
@@ -76,15 +130,36 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 .greeting-sub{font-size:.73rem;color:var(--sub);letter-spacing:.04em;}
 
 /* CAT */
-.cat-frame{width:188px;height:188px;margin:0 auto 8px;border-radius:50%;overflow:visible;border:4px solid var(--blush);outline:2.5px dashed var(--rose);outline-offset:4px;background:var(--blush);position:relative;cursor:pointer;transition:transform .1s,box-shadow .1s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.cat-frame{width:188px;height:188px;margin:0 auto 8px;border-radius:50%;overflow:visible;border:4px solid var(--blush);outline:2.5px dashed var(--rose);outline-offset:4px;background:var(--blush);position:relative;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 .cat-frame::after{content:'';position:absolute;inset:-12px;border-radius:50%;z-index:2;}
-.cat-frame:hover{transform:scale(1.04);box-shadow:0 8px 28px var(--sh1);}
-.cat-frame:active{transform:scale(.92);}
+.cat-frame:hover{transform:scale(1.04);}
+.cat-frame.bouncing{animation:catBounce .32s cubic-bezier(.36,.07,.19,.97) both;}
+.cat-ripple{position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--rose);opacity:0;animation:rippleRing .55s ease-out forwards;pointer-events:none;z-index:3;}
+.cat-ripple.r2{border-color:var(--purple);animation-delay:.12s;inset:-14px;}
 .cat-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .45s;pointer-events:none;border-radius:50%;overflow:hidden;}
 .cat-frame img.hidden{opacity:0;}
 .cat-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.6rem;transition:opacity .3s;}
 .cat-loader.done{opacity:0;pointer-events:none;}
 .click-hint{font-size:.68rem;color:var(--sub);margin-top:5px;animation:blink 2.5s ease-in-out infinite;}
+
+/* Combo badge */
+.combo-badge{
+  position:absolute;top:-10px;right:-10px;
+  background:linear-gradient(135deg,var(--rose),var(--purple));
+  color:white;font-size:.72rem;font-weight:800;
+  border-radius:100px;padding:3px 8px;
+  z-index:10;pointer-events:none;
+  animation:comboFlash .3s cubic-bezier(.22,1,.36,1) both;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+
+/* Particles */
+.click-particle{
+  position:fixed;pointer-events:none;font-size:1.1rem;
+  animation:particlePop .65s cubic-bezier(.22,1,.36,1) forwards;
+  z-index:998;line-height:1;
+}
+.float-thing{position:fixed;pointer-events:none;font-size:1.1rem;font-weight:800;color:var(--rose);animation:floatUp .9s ease forwards;z-index:999;text-shadow:0 1px 4px rgba(0,0,0,.12);}
 
 /* MESSAGES */
 .msg-row{margin-top:14px;}
@@ -100,7 +175,6 @@ body.dark .msg-type.vibe{background:#3a2808;}
 .btn:hover{background:var(--warm);transform:translateY(-2px);}
 .btn:active{transform:none;}
 .date-line{margin-top:14px;font-size:.68rem;color:var(--muted);letter-spacing:.04em;}
-.float-thing{position:fixed;pointer-events:none;font-size:1rem;font-weight:800;color:var(--rose);animation:floatUp .85s ease forwards;z-index:999;}
 
 /* TRACKERS */
 .tracker-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -154,7 +228,7 @@ body.dark .msg-type.vibe{background:#3a2808;}
 .sh-body{padding:10px 12px 20px;overflow-y:auto;flex:1;}
 .sh-body::-webkit-scrollbar{width:3px;}
 .sh-body::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px;}
-.sh-item{display:flex;align-items:center;gap:10px;padding:12px 10px;border-radius:13px;cursor:pointer;transition:background .15s,transform .1s;margin-bottom:4px;user-select:none;-webkit-user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:52px;}
+.sh-item{display:flex;align-items:center;gap:10px;padding:14px 12px;border-radius:13px;cursor:pointer;transition:background .15s,transform .1s;margin-bottom:5px;user-select:none;-webkit-user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:56px;}
 .sh-item:hover:not(.locked):not(.bought){background:var(--lavender);transform:translateX(2px);}
 .sh-item:active:not(.locked):not(.bought){transform:scale(.98);}
 .sh-item.locked{opacity:.32;cursor:not-allowed;}
@@ -170,75 +244,31 @@ body.dark .msg-type.vibe{background:#3a2808;}
 .sh-cnt{font-size:.68rem;color:var(--purple);background:var(--lavender);border-radius:100px;padding:1px 7px;display:inline-block;margin-top:2px;}
 .sh-div{font-size:.6rem;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px 3px;display:block;}
 
-/* ====================================================
-   ONBOARDING — SPLASH + SPOTLIGHT
-==================================================== */
-
-/* SPLASH */
+/* ===== ONBOARDING SPLASH ===== */
 .ob-splash{
   position:fixed;inset:0;z-index:1000;
   background:linear-gradient(160deg, #fde8ed 0%, #fff8f5 55%, #f2eaff 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;
   transition:opacity .7s ease, transform .7s ease;
 }
 .ob-splash.leave{opacity:0;transform:scale(1.04);pointer-events:none;}
-
-.ob-splash-inner{
-  text-align:center;
-  animation:rise .8s cubic-bezier(.22,1,.36,1) both;
-  padding:0 32px;
-}
-.ob-splash-emoji{
-  font-size:5rem;margin-bottom:20px;display:block;
-  animation:pulse 2s ease-in-out infinite;
-}
-.ob-splash-title{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:2.1rem;font-weight:700;color:#2d1a1f;
-  line-height:1.25;margin-bottom:14px;
-}
+.ob-splash-inner{text-align:center;animation:rise .8s cubic-bezier(.22,1,.36,1) both;padding:0 32px;}
+.ob-splash-emoji{font-size:5rem;margin-bottom:20px;display:block;animation:pulse 2s ease-in-out infinite;}
+.ob-splash-title{font-family:'Playfair Display',serif;font-style:italic;font-size:2.1rem;font-weight:700;color:#2d1a1f;line-height:1.25;margin-bottom:14px;}
 .ob-splash-title span{color:var(--rose);}
-.ob-splash-sub{
-  font-size:.92rem;color:#a07080;
-  margin-bottom:36px;line-height:1.6;
-}
-.ob-splash-btn{
-  background:var(--rose);color:white;border:none;border-radius:100px;
-  padding:15px 38px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
-  cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;
-  box-shadow:0 6px 24px rgba(232,99,122,.42);
-}
-.ob-splash-btn:hover{background:var(--warm);transform:translateY(-3px);box-shadow:0 10px 32px rgba(232,99,122,.5);}
+.ob-splash-sub{font-size:.92rem;color:#a07080;margin-bottom:36px;line-height:1.6;}
+.ob-splash-btn{background:var(--rose);color:white;border:none;border-radius:100px;padding:15px 38px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 6px 24px rgba(232,99,122,.42);}
+.ob-splash-btn:hover{background:var(--warm);transform:translateY(-3px);}
 .ob-splash-btn:active{transform:none;}
-
 .ob-dots{display:flex;gap:7px;justify-content:center;margin-top:28px;}
 .ob-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s,transform .3s;}
 .ob-dot.active{background:var(--rose);transform:scale(1.3);}
 
-/* SPOTLIGHT OVERLAY */
-.ob-spot{
-  position:fixed;inset:0;z-index:900;pointer-events:none;
-  opacity:0;transition:opacity .4s;
-}
+/* SPOTLIGHT */
+.ob-spot{position:fixed;inset:0;z-index:900;pointer-events:none;opacity:0;transition:opacity .4s;}
 .ob-spot.visible{opacity:1;pointer-events:auto;}
-
-/* The dark mask is drawn via canvas behind the tooltip */
 .ob-canvas{position:fixed;inset:0;z-index:900;pointer-events:none;}
-
-/* tooltip popup */
-
-.ob-popup{
-  position:fixed;z-index:910;
-  background:white;border-radius:20px;
-  padding:20px 22px 18px;
-  width:min(300px, calc(100vw - 32px));
-  box-shadow:0 8px 40px rgba(0,0,0,.22),0 0 0 1.5px rgba(232,99,122,.18);
-  transition:opacity .4s, transform .4s;
-  opacity:0;transform:translateY(12px);
-  pointer-events:none;
-
-}
+.ob-popup{position:fixed;z-index:910;background:white;border-radius:20px;padding:20px 22px 18px;width:min(300px, calc(100vw - 32px));box-shadow:0 8px 40px rgba(0,0,0,.22),0 0 0 1.5px rgba(232,99,122,.18);transition:opacity .4s, transform .4s;opacity:0;transform:translateY(12px);pointer-events:none;}
 .ob-popup{max-height:calc(100vh - 120px);overflow:auto;-webkit-overflow-scrolling:touch}
 .ob-popup.show{opacity:1;transform:none;pointer-events:auto;}
 .ob-popup-step{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;}
@@ -250,41 +280,168 @@ body.dark .msg-type.vibe{background:#3a2808;}
 .ob-next{background:var(--rose);color:white;border:none;border-radius:100px;padding:9px 22px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:background .2s,transform .1s;box-shadow:0 4px 14px rgba(232,99,122,.36);}
 .ob-next:hover{background:var(--warm);}
 .ob-next:active{transform:scale(.96);}
-
-/* arrow pointer */
-.ob-arrow{
-  position:fixed;z-index:911;pointer-events:none;
-  font-size:1.8rem;
-  transition:opacity .4s,top .4s,left .4s;
-  animation:arrowBob .9s ease-in-out infinite;
-}
+.ob-arrow{position:fixed;z-index:911;pointer-events:none;font-size:1.8rem;transition:opacity .4s,top .4s,left .4s;animation:arrowBob .9s ease-in-out infinite;}
 @keyframes arrowBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-/* ===== NOTIF PANEL ===== */
-.notif-panel{
-  position:fixed;top:60px;left:50%;transform:translateX(-50%);
-  width:320px;max-width:calc(100vw - 32px);
-  background:var(--card);border-radius:20px;
-  box-shadow:0 8px 40px rgba(0,0,0,.18),0 0 0 1.5px var(--div);
-  z-index:800;padding:20px;
-  transition:background .35s;
-  animation:rise .35s cubic-bezier(.22,1,.36,1) both;
+/* ===== SWIPE WRAPPER ===== */
+.sections-wrap{
+  width:100%;display:flex;flex-direction:column;align-items:center;
+  /* sections inside will slide */
 }
-.notif-panel h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px;transition:color .35s;}
-.notif-panel p{font-size:.73rem;color:var(--sub);margin-bottom:16px;line-height:1.5;}
-.notif-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--div);}
-.notif-row:last-child{border-bottom:none;}
-.notif-label{font-size:.8rem;color:var(--text);font-weight:600;transition:color .35s;}
-.notif-label small{display:block;font-size:.67rem;color:var(--sub);font-weight:400;margin-top:1px;}
-/* toggle */
-.toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0;}
-.toggle input{opacity:0;width:0;height:0;position:absolute;}
-.toggle-track{position:absolute;inset:0;border-radius:100px;background:var(--muted);transition:background .25s;cursor:pointer;}
-.toggle input:checked+.toggle-track{background:var(--rose);}
-.toggle-track::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
-.toggle input:checked+.toggle-track::after{transform:translateX(18px);}
-.notif-blocked{font-size:.72rem;color:#e07820;background:#fff3e0;border-radius:8px;padding:6px 10px;margin-top:10px;line-height:1.5;}
-body.dark .notif-blocked{background:#3a2808;}
+
+/* swipe hint dots under bottom tabs */
+.swipe-hint{
+  position:fixed;bottom:62px;left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;pointer-events:none;z-index:299;
+  opacity:0;transition:opacity .4s;
+}
+.swipe-hint.show{opacity:1;}
+.swipe-dot{width:5px;height:5px;border-radius:50%;background:var(--muted);}
+.swipe-dot.active{background:var(--rose);}
+
+/* ===== CAT CUSTOMIZE MODAL ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal-sheet{
+  background:var(--card);border-radius:28px 28px 0 0;
+  padding:24px 22px 36px;width:100%;max-width:480px;
+  transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1),background .35s;
+}
+.modal-overlay.open .modal-sheet{transform:none;}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--muted);margin:0 auto 20px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:18px;text-align:center;transition:color .35s;}
+.modal-label{font-size:.72rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.modal-input{
+  width:100%;border:1.5px solid var(--div);border-radius:14px;
+  padding:12px 16px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;
+  color:var(--text);background:var(--bg);outline:none;
+  transition:border-color .2s,background .35s,color .35s;margin-bottom:18px;
+}
+.modal-input:focus{border-color:var(--rose);}
+.skin-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:22px;}
+.skin-btn{
+  aspect-ratio:1;border-radius:12px;border:2px solid transparent;
+  background:var(--blush);font-size:1.6rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.skin-btn:active{transform:scale(.9);}
+.skin-btn.selected{border-color:var(--rose);background:var(--blush);}
+.modal-save{
+  width:100%;background:var(--rose);color:white;border:none;
+  border-radius:100px;padding:14px;font-family:'Nunito',sans-serif;
+  font-size:.95rem;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 16px rgba(232,99,122,.35);
+  transition:background .2s,transform .15s;
+}
+.modal-save:active{transform:scale(.98);}
+
+/* customize button in tama header */
+.tama-edit-btn{
+  background:none;border:1.5px solid var(--div);border-radius:9px;
+  padding:5px 10px;cursor:pointer;font-size:.82rem;color:var(--sub);
+  transition:background .2s;
+}
+.tama-edit-btn:hover{background:var(--teal-bg);}
+
+/* tama name display */
+#tamaNameDisplay{
+  font-size:.75rem;font-weight:800;color:var(--teal);
+  letter-spacing:.04em;text-transform:uppercase;margin-top:3px;
+  cursor:pointer;border-bottom:1px dashed rgba(91,196,184,.4);
+  display:inline-block;
+}
+
+/* ===== CHANGELOG POPUP ===== */
+.changelog-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.changelog-overlay.open{opacity:1;pointer-events:auto;}
+.changelog-box{
+  background:var(--card);border-radius:24px;padding:26px 22px 22px;
+  width:100%;max-width:360px;
+  transform:scale(.93) translateY(16px);
+  transition:transform .4s cubic-bezier(.22,1,.36,1),background .35s;
+  max-height:80vh;overflow-y:auto;
+}
+.changelog-overlay.open .changelog-box{transform:none;}
+.changelog-ver{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:4px;}
+.changelog-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.3;transition:color .35s;}
+.changelog-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.changelog-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--blush);transition:background .35s;}
+.changelog-item-icon{font-size:1.25rem;flex-shrink:0;line-height:1.2;}
+.changelog-item-text{font-size:.78rem;color:var(--text);line-height:1.5;transition:color .35s;}
+.changelog-item-text strong{font-weight:800;display:block;margin-bottom:1px;}
+.changelog-btn{width:100%;background:var(--rose);color:white;border:none;border-radius:100px;padding:13px;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(232,99,122,.35);transition:background .2s,transform .15s;}
+.changelog-btn:active{transform:scale(.98);}
+
+.tama-card{
+  position:relative;z-index:1;background:var(--card);border-radius:26px;
+  padding:28px 22px 26px;max-width:440px;width:100%;
+  box-shadow:0 4px 6px rgba(91,196,184,.18),0 18px 56px rgba(91,196,184,.12),0 0 0 1px rgba(91,196,184,.1);
+  animation:rise .7s .05s cubic-bezier(.22,1,.36,1) both;
+  transition:background .35s;
+}
+.tama-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.tama-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);transition:color .35s;}
+.tama-title small{display:block;font-family:'Nunito',sans-serif;font-style:normal;font-size:.64rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);}
+.tama-bonus{font-size:.68rem;font-weight:700;padding:4px 11px;border-radius:100px;background:var(--teal-bg);color:var(--teal);}
+.tama-bonus.neg{background:var(--blush);color:var(--rose);}
+
+.tama-face-wrap{text-align:center;margin-bottom:20px;position:relative;}
+.tama-face{font-size:4.5rem;line-height:1;display:block;transition:all .4s ease;}
+.tama-mood{font-family:'Playfair Display',serif;font-style:italic;font-size:.92rem;color:var(--sub);margin-top:8px;}
+.tama-name{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);margin-top:4px;}
+
+/* stat bars */
+.tama-stats{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+.tama-stat{display:flex;align-items:center;gap:9px;}
+.tama-stat-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
+.tama-stat-bar-wrap{flex:1;background:var(--blush);border-radius:100px;height:9px;overflow:hidden;}
+.tama-stat-bar{height:100%;border-radius:100px;transition:width .6s cubic-bezier(.22,1,.36,1);position:relative;}
+.tama-stat-bar.hunger{background:linear-gradient(90deg,#f0874a,#f5b580);}
+.tama-stat-bar.happy{background:linear-gradient(90deg,var(--rose),#f093a4);}
+.tama-stat-bar.energy{background:linear-gradient(90deg,var(--teal),#8de0d8);}
+.tama-stat-val{font-size:.68rem;font-weight:700;color:var(--sub);width:28px;text-align:right;flex-shrink:0;}
+.tama-stat-bar.low{background:linear-gradient(90deg,#e85555,#f08080)!important;}
+
+/* action buttons */
+.tama-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tama-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:var(--teal-bg);border:1.5px solid rgba(91,196,184,.25);
+  border-radius:16px;padding:14px 8px;cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:transform .15s,box-shadow .15s,background .2s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.tama-btn:hover{background:rgba(91,196,184,.18);transform:translateY(-1px);}
+.tama-btn:active{transform:scale(.96);}
+.tama-btn.disabled{opacity:.38;cursor:not-allowed;pointer-events:none;}
+.tama-btn-icon{font-size:1.6rem;}
+.tama-btn-name{font-size:.72rem;font-weight:700;color:var(--text);}
+.tama-btn-cost{font-size:.62rem;color:var(--teal);font-weight:700;}
+.tama-btn-cost.free{color:var(--green);}
+.tama-btn-cost.expensive{color:var(--sub);}
+
+.tama-status-msg{
+  text-align:center;font-size:.75rem;color:var(--sub);
+  padding:8px 12px;background:var(--teal-bg);border-radius:10px;
+  margin-top:12px;line-height:1.5;
+  transition:background .35s;
+}
+.tama-bonus-indicator{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:10px;font-size:.72rem;color:var(--sub);
+}
+.tama-bonus-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);}
+.tama-bonus-dot.neg{background:var(--rose);}
 </style>
 </head>
 <body>
@@ -292,21 +449,29 @@ body.dark .notif-blocked{background:#3a2808;}
 <div class="petals" id="petals"></div>
 <div class="toast-container" id="toasts"></div>
 
-<!-- ONBOARDING SPLASH -->
+<!-- SPLASH (every launch) -->
 <div class="ob-splash" id="obSplash">
   <div class="ob-splash-inner">
     <span class="ob-splash-emoji" id="obEmoji">🌸</span>
     <div class="ob-splash-title" id="obTitle">привет, <span id="obName">ладошка!</span></div>
-    <div class="ob-splash-sub" id="obSub">серёжа сделал для тебя кое-что<br>небольшой тур по странице?</div>
-    <button class="ob-splash-btn" id="obSplashBtn" onclick="startTour()">давай! 🐾</button>
+    <div class="ob-splash-sub" id="obSub">рады видеть тебя снова 🐾</div>
+    <!-- returning visitor mode -->
+    <div id="splashReturn">
+      <button class="ob-splash-btn" onclick="dismissSplash()">войти ✨</button>
+    </div>
+    <!-- first visit mode (hidden by default, shown via JS) -->
+    <div id="splashFirst" style="display:none">
+      <button class="ob-splash-btn" onclick="startTour()">покажи всё! 🐾</button>
+      <div style="margin-top:12px">
+        <button class="ob-skip" style="font-size:.82rem" onclick="dismissSplash()">пропустить тур</button>
+      </div>
+    </div>
     <div class="ob-dots" id="obDots"></div>
   </div>
 </div>
 
 <!-- SPOTLIGHT CANVAS -->
 <canvas class="ob-canvas" id="obCanvas"></canvas>
-
-<!-- SPOTLIGHT POPUP -->
 <div class="ob-popup" id="obPopup">
   <div class="ob-popup-step" id="obStepLbl"></div>
   <div class="ob-popup-title" id="obPopTitle"></div>
@@ -317,8 +482,6 @@ body.dark .notif-blocked{background:#3a2808;}
   </div>
 </div>
 <div class="ob-arrow" id="obArrow" style="opacity:0">👆</div>
-
-<!-- SPOTLIGHT DIMMER (click-through blocker area) -->
 <div class="ob-spot" id="obSpot" style="pointer-events:none;"></div>
 
 <!-- TOP BAR -->
@@ -326,7 +489,6 @@ body.dark .notif-blocked{background:#3a2808;}
   <div class="top-left">
     <button class="tb-btn" id="darkBtn" onclick="toggleDark()">🌙</button>
     <button class="tb-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
-    <button class="tb-btn" id="notifBtn" onclick="toggleNotifs()" title="уведомления">🔔</button>
   </div>
   <button class="fab" id="fab" onclick="openDrawer()">
     🐾 <span id="fabN">0</span>
@@ -342,8 +504,8 @@ body.dark .notif-blocked{background:#3a2808;}
   </div>
   <div class="dw-stats">
     <div class="dw-stat"><div class="dw-big" id="dwN">0</div><div class="dw-lbl">мурлыков</div></div>
-    <div class="dw-stat"><div class="dw-big" id="dwCps">0</div><div class="dw-lbl">в секунду</div></div>
-    <div class="dw-stat"><div class="dw-big" id="dwClick">x1</div><div class="dw-lbl">за тык</div></div>
+    <div class="dw-stat"><div class="dw-big" id="dwCps">0</div><div class="dw-lbl">🐾 в секунду</div></div>
+    <div class="dw-stat"><div class="dw-big" id="dwClick">x1</div><div class="dw-lbl">🖐 за тычок</div></div>
   </div>
   <div class="sh-tabs">
     <button class="sh-tab active" id="tabB" onclick="switchTab('b')">котики и люди</button>
@@ -352,34 +514,18 @@ body.dark .notif-blocked{background:#3a2808;}
   <div class="sh-body" id="shBody"></div>
 </div>
 
-<!-- NOTIF PANEL -->
-<div id="notifPanel" style="display:none;">
-  <div class="notif-panel" id="notifPanelInner">
-    <h3>🔔 уведомления</h3>
-    <p>работают когда страница открыта в браузере. нажми на уведомление — откроется эта страничка.</p>
-    <div class="notif-row">
-      <div class="notif-label">за 2 часа до конца работы<small>в 15:00 / 16:00</small></div>
-      <label class="toggle"><input type="checkbox" id="n2h" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
-    </div>
-    <div class="notif-row">
-      <div class="notif-label">за 1 час до конца работы<small>в 16:00 / 17:00</small></div>
-      <label class="toggle"><input type="checkbox" id="n1h" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
-    </div>
-    <div class="notif-row">
-      <div class="notif-label">завтра пятница! 🎉<small>в четверг около 18:00</small></div>
-      <label class="toggle"><input type="checkbox" id="nFri" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
-    </div>
-    <div class="notif-row">
-      <div class="notif-label">скоро отпуск!<small>когда до отпуска 7 дней или меньше</small></div>
-      <label class="toggle"><input type="checkbox" id="nVac" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
-    </div>
-    <div class="notif-row">
-      <div class="notif-label">мурлыки накопились 🐾<small>при достижении новых вершин</small></div>
-      <label class="toggle"><input type="checkbox" id="nMurl" onchange="saveNotifSettings()"><div class="toggle-track"></div></label>
-    </div>
-    <div id="notifBlocked" class="notif-blocked" style="display:none">браузер заблокировал уведомления. разреши их в настройках сайта и перезагрузи страницу.</div>
-  </div>
+<!-- BOTTOM TABS -->
+<div class="bottom-tabs">
+  <button class="bt-tab active" id="btMain" onclick="switchSection('main')">
+    <span class="bt-icon">🌸</span>главная
+  </button>
+  <button class="bt-tab" id="btTama" onclick="switchSection('tama')">
+    <span class="bt-icon">🐱</span>тамагочи
+  </button>
 </div>
+
+<!-- ===================== SECTION: MAIN ===================== -->
+<div id="sectionMain" style="display:flex;flex-direction:column;gap:22px;width:100%;max-width:440px;align-items:center;">
 
 <!-- GREETING -->
 <div class="greeting-card" id="greetCard">
@@ -388,9 +534,9 @@ body.dark .notif-blocked{background:#3a2808;}
   <div class="greeting-sub" id="gSub">сегодня будет хорошо</div>
 </div>
 
-<!-- MAIN CARD -->
+<!-- MAIN CARD (clicker) -->
 <div class="card" id="mainCard">
-  <div class="cat-frame" id="catFrame" onclick="onCatClick(event)">
+  <div class="cat-frame" id="catFrame">
     <div class="cat-loader" id="loader">🐾</div>
     <img id="catImg" class="hidden" alt="котик"/>
   </div>
@@ -410,8 +556,248 @@ body.dark .notif-blocked{background:#3a2808;}
 <!-- VACATION CARD -->
 <div class="side-card vac-c" id="vacCard"></div>
 
+</div><!-- /sectionMain -->
+
+<!-- ===================== SECTION: TAMA ===================== -->
+<div id="sectionTama" style="display:none;width:100%;max-width:440px;flex-direction:column;gap:22px;align-items:center;">
+
+<div class="tama-card" id="tamaCard">
+  <div class="tama-header">
+    <div>
+      <div class="tama-title"><small>твой питомец</small><span id="tamaCatNameTitle">мяу-котик</span></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="tama-bonus" id="tamaBonusLabel">загрузка...</div>
+      <button class="tama-edit-btn" onclick="openCatModal()" title="настроить котика">✏️</button>
+    </div>
+  </div>
+
+  <div class="tama-face-wrap">
+    <span class="tama-face" id="tamaFace">🐱</span>
+    <div class="tama-mood" id="tamaMood">котик в порядке</div>
+    <div id="tamaNameDisplay" onclick="openCatModal()">нажми чтобы назвать</div>
+  </div>
+
+  <div class="tama-stats">
+    <div class="tama-stat">
+      <span class="tama-stat-icon">🍱</span>
+      <div class="tama-stat-bar-wrap"><div class="tama-stat-bar hunger" id="statHunger" style="width:100%"></div></div>
+      <span class="tama-stat-val" id="statHungerVal">100</span>
+    </div>
+    <div class="tama-stat">
+      <span class="tama-stat-icon">💖</span>
+      <div class="tama-stat-bar-wrap"><div class="tama-stat-bar happy" id="statHappy" style="width:100%"></div></div>
+      <span class="tama-stat-val" id="statHappyVal">100</span>
+    </div>
+    <div class="tama-stat">
+      <span class="tama-stat-icon">⚡</span>
+      <div class="tama-stat-bar-wrap"><div class="tama-stat-bar energy" id="statEnergy" style="width:100%"></div></div>
+      <span class="tama-stat-val" id="statEnergyVal">100</span>
+    </div>
+  </div>
+
+  <div class="tama-actions">
+    <button class="tama-btn" id="btnFeed" onclick="tamaAction('feed')">
+      <span class="tama-btn-icon">🍱</span>
+      <span class="tama-btn-name">покормить</span>
+      <span class="tama-btn-cost" id="costFeed">…</span>
+    </button>
+    <button class="tama-btn" id="btnPlay" onclick="tamaAction('play')">
+      <span class="tama-btn-icon">🎾</span>
+      <span class="tama-btn-name">поиграть</span>
+      <span class="tama-btn-cost" id="costPlay">…</span>
+    </button>
+    <button class="tama-btn" id="btnTreat" onclick="tamaAction('treat')">
+      <span class="tama-btn-icon">🐟</span>
+      <span class="tama-btn-name">вкусняшка</span>
+      <span class="tama-btn-cost" id="costTreat">…</span>
+    </button>
+    <button class="tama-btn" id="btnSleep" onclick="tamaAction('sleep')">
+      <span class="tama-btn-icon">💤</span>
+      <span class="tama-btn-name">поспать</span>
+      <span class="tama-btn-cost free">бесплатно</span>
+    </button>
+  </div>
+
+  <div class="tama-status-msg" id="tamaStatusMsg">
+    ухаживай за котиком — он влияет на твои мурлыки! счастливый котик даёт +20% к доходу 🐾
+  </div>
+
+  <div class="tama-bonus-indicator">
+    <div class="tama-bonus-dot" id="tamaDot"></div>
+    <span id="tamaInfluence">бонус к мурлыкам: загрузка</span>
+  </div>
+</div>
+
+<!-- Second tama info card -->
+<div class="side-card" style="box-shadow:0 4px 6px rgba(91,196,184,.12),0 14px 40px rgba(91,196,184,.08);animation:rise .75s .1s cubic-bezier(.22,1,.36,1) both;">
+  <div class="tracker-header">
+    <span class="tracker-icon">📊</span>
+    <h2 style="color:var(--text)"><small style="color:var(--teal)">как работают</small>бонусы котика</h2>
+  </div>
+  <div style="font-size:.75rem;color:var(--sub);line-height:1.7;display:flex;flex-direction:column;gap:6px;">
+    <div>😸 <strong style="color:var(--text)">очень счастлив</strong> → мурлыков <strong style="color:var(--green)">+20%</strong></div>
+    <div>😺 <strong style="color:var(--text)">доволен</strong> → всё нормально</div>
+    <div>😿 <strong style="color:var(--text)">грустит</strong> → мурлыков <strong style="color:var(--rose)">-15%</strong></div>
+    <div>🙀 <strong style="color:var(--text)">несчастен</strong> → мурлыков <strong style="color:var(--rose)">-30%</strong></div>
+    <div style="margin-top:4px;">😾 <strong style="color:var(--text)">голодный</strong> → каждый тычок <strong style="color:var(--rose)">-20%</strong></div>
+    <div style="font-size:.68rem;color:var(--muted);margin-top:4px;border-top:1px solid var(--div);padding-top:8px;">котику нужно кушать и играть даже пока страница закрыта. заходи почаще! 🐱</div>
+  </div>
+</div>
+
+</div><!-- /sectionTama -->
+
+<!-- SWIPE HINT DOTS -->
+<div class="swipe-hint" id="swipeHint">
+  <div class="swipe-dot active" id="sd0"></div>
+  <div class="swipe-dot" id="sd1"></div>
+</div>
+
+<!-- CAT CUSTOMIZE MODAL -->
+<div class="modal-overlay" id="catModal" onclick="closeCatModalOutside(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🐱 настройка котика</div>
+    <div class="modal-label">имя котика</div>
+    <input class="modal-input" id="catNameInput" type="text" maxlength="20" placeholder="например: мяуша" />
+    <div class="modal-label">внешность</div>
+    <div class="skin-grid" id="skinGrid"></div>
+    <button class="modal-save" onclick="saveCatModal()">сохранить 💾</button>
+  </div>
+</div>
+
+<!-- CHANGELOG MODAL -->
+<div class="changelog-overlay" id="changelogModal">
+  <div class="changelog-box">
+    <div class="changelog-ver" id="clVer">версия 2.0</div>
+    <div class="changelog-title" id="clTitle">что нового? 🎉</div>
+    <div class="changelog-list" id="clList"></div>
+    <button class="changelog-btn" onclick="dismissChangelog()">ура, понятно! 🐾</button>
+  </div>
+</div>
+
 <script>
 'use strict';
+
+// ============================================================
+// SECTION SWITCHING + SWIPE
+// ============================================================
+let currentSection = 'main';
+const SECTIONS = ['main','tama'];
+
+function switchSection(s, animate) {
+  const prev = currentSection;
+  currentSection = s;
+  const idx = SECTIONS.indexOf(s);
+
+  document.getElementById('sectionMain').style.display = s === 'main' ? 'flex' : 'none';
+  const tamaEl = document.getElementById('sectionTama');
+  tamaEl.style.display = s === 'tama' ? 'flex' : 'none';
+
+  document.getElementById('btMain').classList.toggle('active', s === 'main');
+  document.getElementById('btTama').classList.toggle('active', s === 'tama');
+
+  // update swipe dots
+  document.getElementById('sd0').classList.toggle('active', idx === 0);
+  document.getElementById('sd1').classList.toggle('active', idx === 1);
+
+  // show swipe hint briefly on first switch
+  const hint = document.getElementById('swipeHint');
+  hint.classList.add('show');
+  clearTimeout(hint._t);
+  hint._t = setTimeout(()=>hint.classList.remove('show'), 1800);
+
+  if (s === 'tama') { renderTama(); updateCatDisplay(); }
+}
+
+// Touch swipe between sections
+(function(){
+  let sx=0, sy=0;
+  document.addEventListener('touchstart', e=>{
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    // only horizontal swipes, not in drawer/modal
+    if(Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx)*0.7) return;
+    if(document.getElementById('drawer').classList.contains('open')) return;
+    if(document.getElementById('catModal').classList.contains('open')) return;
+    const idx = SECTIONS.indexOf(currentSection);
+    if(dx < 0 && idx < SECTIONS.length-1) switchSection(SECTIONS[idx+1], true);
+    if(dx > 0 && idx > 0) switchSection(SECTIONS[idx-1], true);
+  }, {passive:true});
+})();
+
+// ============================================================
+// CAT CUSTOMIZATION
+// ============================================================
+const CAT_SKINS = ['🐱','😺','😸','😹','😻','😼','😽','🙀','😿','😾','🐈','🐈‍⬛','🦁','🐯','🐻','🐼','🐨','🦊'];
+let catName = '';
+let catSkin = '🐱';
+
+function loadCatCustom(){
+  try{
+    catName = localStorage.getItem('lada_cat_name') || '';
+    catSkin = localStorage.getItem('lada_cat_skin') || '🐱';
+  }catch(e){}
+}
+function saveCatCustom(){
+  try{
+    localStorage.setItem('lada_cat_name', catName);
+    localStorage.setItem('lada_cat_skin', catSkin);
+  }catch(e){}
+}
+
+function updateCatDisplay(){
+  const nameEl = document.getElementById('tamaNameDisplay');
+  const titleEl = document.getElementById('tamaCatNameTitle');
+  const faceEl = document.getElementById('tamaFace');
+  if(nameEl) nameEl.textContent = catName || 'нажми чтобы назвать';
+  if(titleEl) titleEl.textContent = catName || 'мяу-котик';
+  // face is set by renderTama based on mood, but skin applies
+  // we'll use skin as base and overlay mood will replace it — 
+  // actually let's show skin only when not in special mood state
+}
+
+function buildSkinGrid(selectedSkin){
+  const grid = document.getElementById('skinGrid');
+  grid.innerHTML = '';
+  CAT_SKINS.forEach(skin=>{
+    const btn = document.createElement('button');
+    btn.className = 'skin-btn' + (skin === selectedSkin ? ' selected' : '');
+    btn.textContent = skin;
+    btn.onclick = ()=>{
+      grid.querySelectorAll('.skin-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function openCatModal(){
+  buildSkinGrid(catSkin);
+  document.getElementById('catNameInput').value = catName;
+  document.getElementById('catModal').classList.add('open');
+}
+function closeCatModal(){
+  document.getElementById('catModal').classList.remove('open');
+}
+function closeCatModalOutside(e){
+  if(e.target === document.getElementById('catModal')) closeCatModal();
+}
+function saveCatModal(){
+  catName = document.getElementById('catNameInput').value.trim();
+  const selected = document.getElementById('skinGrid').querySelector('.selected');
+  if(selected) catSkin = selected.textContent;
+  saveCatCustom();
+  closeCatModal();
+  updateCatDisplay();
+  snd('buy');
+  toast('котик обновлён!', catName ? `теперь его зовут ${catName} ${catSkin}` : 'внешность сохранена '+catSkin);
+  renderTama();
+}
 
 // ============================================================
 // MESSAGES
@@ -460,19 +846,6 @@ function refreshMsg(){
   loadCat();
 }
 
-function loadCat(){
-  const img=document.getElementById('catImg'),ld=document.getElementById('loader');
-  img.classList.add('hidden');ld.classList.remove('done');
-  const show=src=>{
-    img.onload=()=>{img.classList.remove('hidden');ld.classList.add('done');};
-    img.onerror=()=>{img.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/400px-RedCat_8727.jpg';img.onload=()=>{img.classList.remove('hidden');ld.classList.add('done');};};
-    img.src=src;
-  };
-  fetch(`https://api.thecatapi.com/v1/images/search?mime_types=gif&limit=1&_=${Date.now()}`)
-    .then(r=>r.json()).then(d=>{if(d&&d[0]&&d[0].url)show(d[0].url);else throw 0;})
-    .catch(()=>show(`https://cataas.com/cat/gif?t=${Date.now()}`));
-}
-
 // ============================================================
 // GREETING
 // ============================================================
@@ -486,8 +859,6 @@ function renderGreeting(){
   document.getElementById('gText').textContent=g.t;
   document.getElementById('gSub').textContent=g.s;
 }
-
-// splash greeting also time-based
 function setSplashGreeting(){
   const h=new Date().getHours();
   const g=h>=5&&h<12?{e:'☀️',name:'доброе утро, ладошка!',sub:'серёжа сделал для тебя кое-что\nнебольшой тур по странице?'}:
@@ -516,6 +887,7 @@ function snd(type){
     if(type==='achieve'){[523,659,784,1047].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.connect(g);g.connect(ac.destination);o.frequency.value=f;const t=now+i*.1;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+.38);o.start(t);o.stop(t+.38);});}
     if(type==='open'){[330,440].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.connect(g);g.connect(ac.destination);o.frequency.value=f;const t=now+i*.12;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.start(t);o.stop(t+.2);});}
     if(type==='whoosh'){const o=ac.createOscillator(),g=ac.createGain();o.type='sawtooth';o.frequency.setValueAtTime(300,now);o.frequency.exponentialRampToValueAtTime(80,now+.18);g.gain.setValueAtTime(.06,now);g.gain.exponentialRampToValueAtTime(.001,now+.2);o.connect(g);g.connect(ac.destination);o.start(now);o.stop(now+.2);}
+    if(type==='tama'){const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(880,now);o.frequency.exponentialRampToValueAtTime(1100,now+.1);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.18);o.connect(g);g.connect(ac.destination);o.start(now);o.stop(now+.18);}
   }catch(e){}
 }
 
@@ -542,36 +914,61 @@ const BLDS=[
   {id:'dream',   n:'котик во сне',  e:'💤', d:'снятся только мурлыки',   c:30000,  r:150 },
   {id:'holiday', n:'вечный отпуск', e:'🛋️',d:'диван и больше ничего',   c:100000, r:500 },
   {id:'purr',    n:'мурлыкопад',    e:'✨', d:'всё само мурлыкает',      c:500000, r:2000},
+  {id:'catnip',  n:'валерьянка',    e:'🌿', d:'котики в экстазе',        c:2000000,r:8000},
+  {id:'cuddle',  n:'обнимашки²',    e:'🤗', d:'серёжа в ударе',          c:8000000,r:30000},
 ];
 const UPGS=[
-  {id:'uc1',n:'острые когти',       e:'🐾',d:'тык x2',              cost:100,   t:'click',m:2,req:null},
-  {id:'uc2',n:'нежный тык',         e:'💅',d:'тык ещё x2',          cost:500,   t:'click',m:2,req:'uc1'},
-  {id:'uc3',n:'мега лапка',         e:'⚡',d:'тык x3',              cost:2000,  t:'click',m:3,req:'uc2'},
-  {id:'uc4',n:'ладошка-профи',      e:'👑',d:'тык x5',              cost:10000, t:'click',m:5,req:'uc3'},
-  {id:'uc5',n:'бесконечный тык',    e:'🌀',d:'тык x10',             cost:50000, t:'click',m:10,req:'uc4'},
-  {id:'up1',n:'пурр-пурр',          e:'😻',d:'все источники x2',   cost:1000,  t:'cps',  m:2,req:null},
-  {id:'up2',n:'уютный плед',        e:'🛌',d:'все источники x2',   cost:10000, t:'cps',  m:2,req:'up1'},
-  {id:'up3',n:'котики сговорились', e:'🐱',d:'все источники x3',   cost:50000, t:'cps',  m:3,req:'up2'},
-  {id:'up4',n:'мурлычный заговор',  e:'🌙',d:'все источники x5',   cost:200000,t:'cps',  m:5,req:'up3'},
-  {id:'ua1',n:'альтуха довольна',   e:'🥰',d:'альтуха и нефор x4', cost:300,   t:'b2',   m:4,ids:['altuha','nefor'],req:null},
-  {id:'ua2',n:'серёжа старается',   e:'💪',d:'серёжа x5',          cost:2500,  t:'b1',   m:5,bid:'seryozha',req:null},
-  {id:'ua3',n:'вторая сигаретка',   e:'✌️',d:'сигаретки x3',      cost:5000,  t:'b1',   m:3,bid:'siga',req:null},
-  {id:'ua4',n:'сон с котиком',      e:'🌟',d:'котик во сне x4',    cost:80000, t:'b1',   m:4,bid:'dream',req:null},
+  // --- тык ---
+  {id:'uc1',n:'острые когти',       e:'🐾',d:'тык x2',              cost:100,     t:'click',m:2,  req:null},
+  {id:'uc2',n:'нежный тык',         e:'💅',d:'тык ещё x2',          cost:500,     t:'click',m:2,  req:'uc1'},
+  {id:'uc3',n:'мега лапка',         e:'⚡',d:'тык x3',              cost:2000,    t:'click',m:3,  req:'uc2'},
+  {id:'uc4',n:'ладошка-профи',      e:'👑',d:'тык x5',              cost:10000,   t:'click',m:5,  req:'uc3'},
+  {id:'uc5',n:'бесконечный тык',    e:'🌀',d:'тык x10',             cost:50000,   t:'click',m:10, req:'uc4'},
+  {id:'uc6',n:'когти дракона',      e:'🐉',d:'тык x20',             cost:300000,  t:'click',m:20, req:'uc5'},
+  {id:'uc7',n:'тык богини',         e:'👸',d:'тык x50',             cost:2000000, t:'click',m:50, req:'uc6'},
+  {id:'uc8',n:'квантовый тычок',    e:'☄️',d:'тык x100',            cost:15000000,t:'click',m:100,req:'uc7'},
+  // --- пассивки ---
+  {id:'up1',n:'пурр-пурр',          e:'😻',d:'все источники x2',   cost:1000,     t:'cps',m:2,   req:null},
+  {id:'up2',n:'уютный плед',        e:'🛌',d:'все источники x2',   cost:10000,    t:'cps',m:2,   req:'up1'},
+  {id:'up3',n:'котики сговорились', e:'🐱',d:'все источники x3',   cost:50000,    t:'cps',m:3,   req:'up2'},
+  {id:'up4',n:'мурлычный заговор',  e:'🌙',d:'все источники x5',   cost:200000,   t:'cps',m:5,   req:'up3'},
+  {id:'up5',n:'квантовый мурлык',   e:'⚛️',d:'все источники x8',  cost:1500000,  t:'cps',m:8,   req:'up4'},
+  {id:'up6',n:'космический пурр',   e:'🌌',d:'все источники x20',  cost:12000000, t:'cps',m:20,  req:'up5'},
+  {id:'up7',n:'мурлыкомагия',       e:'🔮',d:'все источники x50',  cost:100000000,t:'cps',m:50,  req:'up6'},
+  // --- конкретные здания ---
+  {id:'ua1',n:'альтуха довольна',   e:'🥰',d:'альтуха и нефор x4', cost:300,     t:'b2',m:4, ids:['altuha','nefor'],   req:null},
+  {id:'ua2',n:'серёжа старается',   e:'💪',d:'серёжа x5',          cost:2500,    t:'b1',m:5, bid:'seryozha',            req:null},
+  {id:'ua3',n:'вторая сигаретка',   e:'✌️',d:'сигаретки x3',      cost:5000,    t:'b1',m:3, bid:'siga',                req:null},
+  {id:'ua4',n:'сон с котиком',      e:'🌟',d:'котик во сне x4',    cost:80000,   t:'b1',m:4, bid:'dream',               req:null},
+  {id:'ua5',n:'нефор в ударе',      e:'🎸',d:'нефор x6',           cost:1200,    t:'b1',m:6, bid:'nefor',               req:'ua1'},
+  {id:'ua6',n:'1с наконец работает',e:'💿',d:'1с зависла x5',      cost:40000,   t:'b1',m:5, bid:'oc1',                 req:null},
+  {id:'ua7',n:'вечный диван',       e:'🌴',d:'вечный отпуск x4',   cost:400000,  t:'b1',m:4, bid:'holiday',             req:null},
+  {id:'ua8',n:'серёжа суперстар',   e:'⭐',d:'серёжа x10',         cost:25000,   t:'b1',m:10,bid:'seryozha',            req:'ua2'},
+  {id:'ua9',n:'мурлыкопад²',        e:'🌊',d:'мурлыкопад x5',      cost:2500000, t:'b1',m:5, bid:'purr',                req:null},
+  {id:'ua10',n:'валерьянка прем',   e:'🌿',d:'валерьянка x4',      cost:8000000, t:'b1',m:4, bid:'catnip',              req:null},
+  // --- синергии ---
+  {id:'us1',n:'все дома',           e:'🏠',d:'альтуха+нефор+серёжа x3',cost:80000, t:'b2',m:3, ids:['altuha','nefor','seryozha'],req:null},
+  {id:'us2',n:'рабочая смена',      e:'💼',d:'серёжа+сигаретка+1с x3', cost:50000, t:'b2',m:3, ids:['seryozha','siga','oc1'],    req:null},
+  {id:'us3',n:'ночная смена',       e:'🌙',d:'котик во сне+отпуск x4', cost:200000,t:'b2',m:4, ids:['dream','holiday'],           req:null},
 ];
 const ACHS=[
-  {id:'a1', f:s=>s.total>=100,     h:'первые мурлыки!',       b:'100 мурлыков. хорошее начало'},
-  {id:'a2', f:s=>s.total>=1000,    h:'уже 1000!',             b:'серёжа гордится'},
-  {id:'a3', f:s=>s.total>=10000,   h:'мурлыковый богач',      b:'десять тысяч'},
-  {id:'a4', f:s=>s.total>=100000,  h:'мурлыковый магнат',     b:'сто тысяч!'},
-  {id:'a5', f:s=>s.total>=1e6,     h:'мурлыкомиллионер!',     b:'миллион. ладошка победила'},
-  {id:'a6', f:s=>s.clicks>=100,    h:'100 тыков',             b:'котик очень доволен'},
-  {id:'a7', f:s=>s.clicks>=1000,   h:'1000 тыков',            b:'профессиональный тыкатель'},
-  {id:'a8', f:s=>s.clicks>=10000,  h:'10 000 тыков',          b:'абсолютный чемпион'},
-  {id:'a9', f:s=>own(s)>=1,        h:'первый котик!',         b:'магазин открыт'},
-  {id:'a10',f:s=>own(s)>=10,       h:'котовый двор',          b:'десять штук'},
-  {id:'a11',f:s=>own(s)>=50,       h:'котовый завод',         b:'пятьдесят! победа'},
-  {id:'a12',f:s=>s.b.oc1>=1,       h:'1с снова зависла',      b:'заклинание сработало!'},
-  {id:'a13',f:s=>s.b.seryozha>=5,  h:'серёж много не бывает', b:'пять серёж'},
+  {id:'a1', f:s=>s.total>=100,       h:'первые мурлыки!',       b:'100 мурлыков. хорошее начало'},
+  {id:'a2', f:s=>s.total>=1000,      h:'уже 1000!',             b:'серёжа гордится'},
+  {id:'a3', f:s=>s.total>=10000,     h:'мурлыковый богач',      b:'десять тысяч'},
+  {id:'a4', f:s=>s.total>=100000,    h:'мурлыковый магнат',     b:'сто тысяч!'},
+  {id:'a5', f:s=>s.total>=1e6,       h:'мурлыкомиллионер!',     b:'миллион. ладошка победила'},
+  {id:'a6', f:s=>s.total>=1e9,       h:'мурлыкомиллиардер!!',   b:'миллиард! это невозможно'},
+  {id:'a7', f:s=>s.clicks>=100,      h:'100 тыков',             b:'котик очень доволен'},
+  {id:'a8', f:s=>s.clicks>=1000,     h:'1000 тыков',            b:'профессиональный тыкатель'},
+  {id:'a9', f:s=>s.clicks>=10000,    h:'10 000 тыков',          b:'абсолютный чемпион'},
+  {id:'a10',f:s=>own(s)>=1,          h:'первый котик!',         b:'магазин открыт'},
+  {id:'a11',f:s=>own(s)>=10,         h:'котовый двор',          b:'десять штук'},
+  {id:'a12',f:s=>own(s)>=50,         h:'котовый завод',         b:'пятьдесят! победа'},
+  {id:'a13',f:s=>s.b.oc1>=1,         h:'1с снова зависла',      b:'заклинание сработало!'},
+  {id:'a14',f:s=>s.b.seryozha>=5,    h:'серёж много не бывает', b:'пять серёж'},
+  {id:'a15',f:s=>s.b.purr>=1,        h:'мурлыкопад открыт!',    b:'теперь всё само'},
+  {id:'a16',f:s=>getClick()>=100,    h:'тык-100',               b:'сто мурлыков за клик!'},
+  {id:'a17',f:s=>getCpsRaw()>=1000,  h:'1000 в секунду',        b:'доход серьёзный'},
 ];
 function own(s){return Object.values(s.b).reduce((a,v)=>a+v,0);}
 
@@ -586,14 +983,27 @@ function loadS(){
     BLDS.forEach(b=>{S.b[b.id]=sv.b?.[b.id]||0;});
     UPGS.forEach(u=>{S.u[u.id]=sv.u?.[u.id]||false;});
     ACHS.forEach(a=>{S.a[a.id]=sv.a?.[a.id]||false;});
-    if(sv.ts){const secs=Math.min((Date.now()-sv.ts)/1000,8*3600);const earned=getCps()*secs;if(earned>=1){S.m+=earned;S.total+=earned;}if(earned>=50)setTimeout(()=>toast('пока тебя не было...','накопилось '+fmt(earned)+' мурлыков!'),2500);}
+    if(sv.ts){const secs=Math.min((Date.now()-sv.ts)/1000,8*3600);const earned=getCpsRaw()*secs;if(earned>=1){S.m+=earned;S.total+=earned;}if(earned>=50)setTimeout(()=>toast('пока тебя не было...','накопилось '+fmt(earned)+' мурлыков!'),2500);}
   }catch(e){}
 }
 function saveS(){try{localStorage.setItem(SK,JSON.stringify({...S,ts:Date.now()}));}catch(e){}}
 
 function bCost(b){return Math.round(b.c*Math.pow(1.15,S.b[b.id]));}
-function getClick(){let p=1;UPGS.forEach(u=>{if(u.t==='click'&&S.u[u.id])p*=u.m;});return p;}
-function getCps(){let cm=1;UPGS.forEach(u=>{if(u.t==='cps'&&S.u[u.id])cm*=u.m;});let total=0;BLDS.forEach(b=>{if(!S.b[b.id])return;let m=cm;UPGS.forEach(u=>{if(!S.u[u.id])return;if(u.t==='b1'&&u.bid===b.id)m*=u.m;if(u.t==='b2'&&u.ids.includes(b.id))m*=u.m;});total+=b.r*S.b[b.id]*m;});return total;}
+function getClick(){
+  let p=1;
+  UPGS.forEach(u=>{if(u.t==='click'&&S.u[u.id])p*=u.m;});
+  // hunger penalty from tamagotchi
+  if(T.hunger<25) p*=0.8;
+  return Math.max(1, Math.round(p));
+}
+function getCpsRaw(){
+  let cm=1;UPGS.forEach(u=>{if(u.t==='cps'&&S.u[u.id])cm*=u.m;});
+  let total=0;BLDS.forEach(b=>{if(!S.b[b.id])return;let m=cm;
+    UPGS.forEach(u=>{if(!S.u[u.id])return;if(u.t==='b1'&&u.bid===b.id)m*=u.m;if(u.t==='b2'&&u.ids&&u.ids.includes(b.id))m*=u.m;});
+    total+=b.r*S.b[b.id]*m;});
+  return total;
+}
+function getCps(){return getCpsRaw()*getTamaModifier();}
 function fmt(n){if(n>=1e12)return(n/1e12).toFixed(2)+'Т';if(n>=1e9)return(n/1e9).toFixed(2)+'Г';if(n>=1e6)return(n/1e6).toFixed(2)+'М';if(n>=1e3)return(n/1e3).toFixed(1)+'К';return Math.floor(n).toString();}
 
 let curTab='b';
@@ -601,28 +1011,109 @@ function updateUI(){
   const m=fmt(S.m);document.getElementById('fabN').textContent=m;document.getElementById('dwN').textContent=m;document.getElementById('dwCps').textContent=fmt(getCps());document.getElementById('dwClick').textContent='x'+getClick();renderShop();
 }
 function renderShop(){document.getElementById('shBody').innerHTML=curTab==='b'?BLDS.map(bldHtml).join(''):upgsHtml();}
-function bldHtml(b){const n=S.b[b.id],cost=bCost(b),can=S.m>=cost,cps=n>0?` (+${fmt(b.r*n)}/c)`:'';return`<div class="sh-item ${can?'affordable':'locked'}" onclick="buyBld('${b.id}')"><span class="sh-emoji">${b.e}</span><div class="sh-info"><div class="sh-name">${b.n}</div><div class="sh-desc">${b.d}${cps}</div></div><div class="sh-right"><div class="sh-cost ${can?'':'no'}">${fmt(cost)}</div>${n?`<div class="sh-cnt">x${n}</div>`:''}</div></div>`;}
-function upgsHtml(){const cl=UPGS.filter(u=>u.t==='click'),ps=UPGS.filter(u=>u.t!=='click');return'<span class="sh-div">улучшения тыка</span>'+cl.map(upgHtml).join('')+'<span class="sh-div">пассивный доход</span>'+ps.map(upgHtml).join('');}
+function bldHtml(b){const n=S.b[b.id],cost=bCost(b),can=S.m>=cost,cps=n>0?` (+${fmt(b.r*n)}/с)`:'';return`<div class="sh-item ${can?'affordable':'locked'}" onclick="buyBld('${b.id}')"><span class="sh-emoji">${b.e}</span><div class="sh-info"><div class="sh-name">${b.n}</div><div class="sh-desc">${b.d}${cps}</div></div><div class="sh-right"><div class="sh-cost ${can?'':'no'}">${fmt(cost)}</div>${n?`<div class="sh-cnt">x${n}</div>`:''}</div></div>`;}
+function upgsHtml(){
+  const cl=UPGS.filter(u=>u.t==='click');
+  const ps=UPGS.filter(u=>u.t==='cps');
+  const sp=UPGS.filter(u=>u.t==='b1'||u.t==='b2');
+  return '<span class="sh-div">улучшения тыка</span>'+cl.map(upgHtml).join('')+
+         '<span class="sh-div">пассивный доход</span>'+ps.map(upgHtml).join('')+
+         '<span class="sh-div">конкретные котики и синергии</span>'+sp.map(upgHtml).join('');
+}
 function upgHtml(u){const bought=S.u[u.id],can=S.m>=u.cost,reqOk=!u.req||S.u[u.req],cls=bought?'bought':(!can||!reqOk)?'locked':'affordable',hint=u.req&&!S.u[u.req]?' (нужно купить предыдущее)':'';return`<div class="sh-item ${cls}" onclick="buyUpg('${u.id}')"><span class="sh-emoji">${u.e}</span><div class="sh-info"><div class="sh-name">${u.n}</div><div class="sh-desc">${u.d}${hint}</div></div><div class="sh-right"><div class="sh-cost ${!can&&!bought?'no':''}">${bought?'✓':fmt(u.cost)}</div></div></div>`;}
 function switchTab(t){curTab=t;document.getElementById('tabB').classList.toggle('active',t==='b');document.getElementById('tabU').classList.toggle('active',t==='u');renderShop();}
 function buyBld(id){const b=BLDS.find(x=>x.id===id),cost=bCost(b);if(S.m<cost)return;initAudio();snd('buy');S.m-=cost;S.b[id]++;checkAchs();updateUI();saveS();}
 function buyUpg(id){const u=UPGS.find(x=>x.id===id);if(!u||S.u[id]||S.m<u.cost)return;if(u.req&&!S.u[u.req])return;initAudio();snd('buy');S.m-=u.cost;S.u[id]=true;checkAchs();updateUI();saveS();}
 
-const FLOATS=['+мурлык','🐾','🌸','💖','✨','пурр','лапка','мрр'];
+// ============================================================
+// CLICK EFFECTS — rich particles + haptic + ripple
+// ============================================================
+const FLOATS=['+мурлык','🐾','🌸','💖','✨','пурр','лапка','мрр','мяу'];
+const PARTICLES=['🐾','✨','💖','🌸','⭐','💫','🎀','🌺'];
+
+let comboCount=0,comboTimer=null;
+
 function onCatClick(e){
   if(e && e.preventDefault) e.preventDefault();
   initAudio();snd('click');
-  const pow=getClick();S.m+=pow;S.total+=pow;S.clicks++;
+
+  const pow=getClick();
+  S.m+=pow;S.total+=pow;S.clicks++;
+
+  // Get click coordinates
+  const src = e ? (e.changedTouches ? e.changedTouches[0] : (e.touches ? e.touches[0] : e)) : null;
+  const cx = src ? src.clientX : window.innerWidth/2;
+  const cy = src ? src.clientY : window.innerHeight/2;
+
+  // Haptic feedback (Android)
+  try{if(navigator.vibrate)navigator.vibrate(18);}catch(e){}
+
+  // Cat bounce animation
+  const frame=document.getElementById('catFrame');
+  frame.classList.remove('bouncing');
+  void frame.offsetWidth;
+  frame.classList.add('bouncing');
+  setTimeout(()=>frame.classList.remove('bouncing'),320);
+
+  // Ripple rings
+  addRipple(frame);
+
+  // Combo tracking
+  comboCount++;
+  if(comboTimer) clearTimeout(comboTimer);
+  comboTimer = setTimeout(()=>{comboCount=0;removeComboBadge();},1100);
+  if(comboCount>=3) showComboBadge(comboCount);
+
+  // Particles burst
+  const particleCount = Math.min(4 + Math.floor(comboCount/3), 9);
+  for(let i=0;i<particleCount;i++){
+    const angle = (360/particleCount)*i + Math.random()*18;
+    const dist = 38 + Math.random()*44;
+    const rad = angle * Math.PI/180;
+    const px = Math.cos(rad)*dist;
+    const py = Math.sin(rad)*dist;
+    const p = document.createElement('div');
+    p.className='click-particle';
+    p.textContent = PARTICLES[Math.floor(Math.random()*PARTICLES.length)];
+    p.style.cssText=`left:${cx-10}px;top:${cy-10}px;--px:${px}px;--py:${py}px;animation-duration:${.5+Math.random()*.2}s;font-size:${.9+Math.random()*.5}rem`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),800);
+  }
+
+  // Big float number
   const t=document.createElement('div');t.className='float-thing';
-  t.textContent=pow>=10?`+${fmt(pow)} 🐾`:(Math.random()<.3?FLOATS[Math.floor(Math.random()*FLOATS.length)]:`+${pow}`);
-  const src = e ? (e.changedTouches ? e.changedTouches[0] : (e.touches ? e.touches[0] : e)) : {clientX: window.innerWidth/2, clientY: window.innerHeight/2};
-  t.style.left=(src.clientX-14)+'px';t.style.top=(src.clientY-8)+'px';
-  document.body.appendChild(t);setTimeout(()=>t.remove(),850);
+  const comboBonus = comboCount>=10?'🔥 ':comboCount>=5?'⚡ ':'';
+  t.textContent=pow>=10?`${comboBonus}+${fmt(pow)} 🐾`:(Math.random()<.3?FLOATS[Math.floor(Math.random()*FLOATS.length)]:`+${pow}`);
+  t.style.left=(cx-18)+'px';t.style.top=(cy-12)+'px';
+  t.style.fontSize = comboCount>=5?'1.3rem':'1.1rem';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),900);
+
   checkAchs();updateUI();
 }
 
+function addRipple(frame){
+  const r1=document.createElement('div');r1.className='cat-ripple';frame.appendChild(r1);setTimeout(()=>r1.remove(),600);
+  if(comboCount>=3){
+    const r2=document.createElement('div');r2.className='cat-ripple r2';frame.appendChild(r2);setTimeout(()=>r2.remove(),700);
+  }
+}
+
+function showComboBadge(count){
+  removeComboBadge();
+  const frame=document.getElementById('catFrame');
+  const b=document.createElement('div');b.className='combo-badge';b.id='comboBadge';
+  b.textContent=count+'x combo!';
+  frame.appendChild(b);
+}
+function removeComboBadge(){const b=document.getElementById('comboBadge');if(b)b.remove();}
+
 let lastT=Date.now();
-function tick(){const now=Date.now(),dt=(now-lastT)/1000;lastT=now;const g=getCps()*dt;S.m+=g;S.total+=g;updateUI();checkAchs();checkMurlykiNotif();}
+function tick(){
+  const now=Date.now(),dt=(now-lastT)/1000;lastT=now;
+  const g=getCps()*dt;S.m+=g;S.total+=g;
+  tickTama(dt);
+  updateUI();checkAchs();
+}
 function checkAchs(){ACHS.forEach(a=>{if(S.a[a.id])return;if(a.f(S)){S.a[a.id]=true;toast(a.h,a.b);snd('achieve');}});}
 function toast(title,body){const el=document.createElement('div');el.className='toast';el.innerHTML=`<div class="toast-title">🏅 ${title}</div><div class="toast-body">${body}</div>`;document.getElementById('toasts').appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},3500);}
 
@@ -660,570 +1151,469 @@ function renderVacation(){
   if(!stored){card.innerHTML=hdr+`<div class="no-vac"><p>когда отпуск? введи дату и считаем вместе!</p></div><div class="date-edit open" id="dEdit"><label>дата начала отпуска</label><input type="date" id="vIn"/><button class="save-btn" onclick="saveDate()">сохранить</button></div>`;return;}
   const vd=new Date(stored);vd.setHours(0,0,0,0);const today=new Date();today.setHours(0,0,0,0);const dl=Math.ceil((vd-today)/864e5);let content='';
   if(dl<=0){content=`<div style="text-align:center;padding:8px 0"><div style="font-size:2.1rem;margin-bottom:8px">🎉</div><p class="t-msg">отпуск уже настал!</p><p class="t-sub" style="margin-top:4px">ладошка заслужила!</p></div>`;}
-  else{const sk='lada_vac_set';let sd;try{sd=localStorage.getItem(sk);}catch(e){}if(!sd){const d=today.toISOString().slice(0,10);try{localStorage.setItem(sk,d);sd=d;}catch(e){}}const start=new Date(sd||today);start.setHours(0,0,0,0);const tot=Math.max(1,Math.ceil((vd-start)/864e5));const pct=Math.min(100,Math.max(2,Math.round(((tot-dl)/tot)*100)));const vs=vd.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});const hy=dl===1?'завтра!!!! 🎉':dl<=3?'уже совсем скоро!':dl<=7?'одна неделька!':dl<=14?'две недельки!':'держимся, ладошка!';content=`<div class="days-left" style="text-align:center;margin-bottom:8px"><span class="days-n">${dl}</span><span class="days-l">${dl===1?'день':dl<5?'дня':'дней'} до отпуска</span></div><div style="height:8px"></div><div class="vac-pw"><div class="vac-pb" id="vBar" style="width:2%"></div></div><div class="t-stats"><span>начали считать</span><span>${pct}% пути</span><span>отпуск!</span></div><div class="vac-info">🗓 ${vs} — ${hy}</div>`;setTimeout(()=>{const b=document.getElementById('vBar');if(b)b.style.width=pct+'%';},200);}
+  else{const sk='lada_vac_set';let sd;try{sd=localStorage.getItem(sk);}catch(e){}if(!sd){const d=today.toISOString().slice(0,10);try{localStorage.setItem(sk,d);sd=d;}catch(e){}}const start=new Date(sd||today);start.setHours(0,0,0,0);const tot=Math.max(1,Math.ceil((vd-start)/864e5));const pct=Math.min(100,Math.max(2,Math.round(((tot-dl)/tot)*100)));const vs=vd.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});const hy=dl===1?'завтра!!!! 🎉':dl<=3?'уже совсем скоро!':dl<=7?'одна неделька!':dl<=14?'две недельки!':'держимся, ладошка!';content=`<div class="days-left" style="text-align:center;margin-bottom:8px"><span class="days-n">${dl}</span><span class="days-l">${dl===1?'день':dl<5?'дня':'дней'} до отпуска</span></div><div style="height:8px"></div><div class="vac-pw"><div class="vac-pb" id="vBar" style="width:2%"></div></div><div class="t-stats"><span>начали считать</span><span>${pct}% пути</span><span>отпуск!</span></div><div class="vac-info">🗓 ${vs} — ${hy}</div>`;}
   card.innerHTML=hdr+content+`<div style="text-align:center"><button class="edit-btn" onclick="toggleDE()">изменить дату</button></div><div class="date-edit" id="dEdit"><label>новая дата отпуска</label><input type="date" id="vIn" value="${stored}"/><button class="save-btn" onclick="saveDate()">сохранить</button></div>`;
+  if(dl>0){setTimeout(()=>{const b=document.getElementById('vBar');if(b){const sk='lada_vac_set';let sd;try{sd=localStorage.getItem(sk);}catch(e){}const start=new Date(sd||today);start.setHours(0,0,0,0);const tot=Math.max(1,Math.ceil((vd-start)/864e5));const pct=Math.min(100,Math.max(2,Math.round(((tot-dl)/tot)*100)));b.style.width=pct+'%';}},300);}
 }
 function toggleDE(){document.getElementById('dEdit').classList.toggle('open');}
 function saveDate(){const v=document.getElementById('vIn').value;if(!v)return;setVD(v);try{localStorage.removeItem('lada_vac_set');}catch(e){}renderVacation();}
 
 // ============================================================
+// TAMAGOTCHI
+// ============================================================
+const TK='lada_tama_v1';
+let T = {hunger:100, happiness:100, energy:100, ts: Date.now()};
+
+// Decay rates per second
+const T_DECAY = {
+  hunger:   1/180,  // full → empty in 3h
+  happiness:1/300,  // full → empty in 5h
+  energy:   1/480,  // full → empty in 8h
+};
+
+// Dynamic costs: ~30s / ~90s / ~5min of current income (minimum floor)
+function tamaCost(action){
+  const cps = Math.max(1, getCps());
+  const floors = {feed:500, play:2000, treat:8000};
+  const mults  = {feed:30,  play:90,   treat:300};
+  return Math.max(floors[action], Math.round(cps * mults[action]));
+}
+
+function loadTama(){
+  try{
+    const raw=localStorage.getItem(TK); if(!raw)return;
+    const sv=JSON.parse(raw);
+    T.hunger=sv.hunger??100;T.happiness=sv.happiness??100;T.energy=sv.energy??100;T.ts=sv.ts||Date.now();
+    // Apply offline decay (max 12h)
+    const secs=Math.min((Date.now()-T.ts)/1000, 12*3600);
+    T.hunger=Math.max(0,T.hunger-T_DECAY.hunger*secs);
+    T.happiness=Math.max(0,T.happiness-T_DECAY.happiness*secs);
+    T.energy=Math.max(0,T.energy-T_DECAY.energy*secs);
+    T.ts=Date.now();
+  }catch(e){}
+}
+function saveTama(){try{localStorage.setItem(TK,JSON.stringify({...T,ts:Date.now()}));}catch(e){}}
+
+function tickTama(dt){
+  T.hunger=Math.max(0,T.hunger-T_DECAY.hunger*dt);
+  T.happiness=Math.max(0,T.happiness-T_DECAY.happiness*dt);
+  T.energy=Math.max(0,T.energy-T_DECAY.energy*dt);
+  if(currentSection==='tama') renderTama();
+}
+
+function getTamaMood(){
+  const avg=(T.hunger+T.happiness+T.energy)/3;
+  if(T.energy<12) return{e:'😴',msg:'котик хочет спать...'};
+  if(T.hunger<12) return{e:'😾',msg:'котик голоден!'};
+  if(T.happiness<12) return{e:'🙀',msg:'котику совсем плохо!'};
+  if(avg>82) return{e:'😸',msg:'котик просто счастлив!'};
+  if(avg>62) return{e:'😺',msg:'котику хорошо и уютно'};
+  if(avg>40) return{e:'🐱',msg:'котик в порядке'};
+  if(avg>22) return{e:'😿',msg:'котику немного грустно'};
+  return{e:'🙀',msg:'котику плохо, помоги!'};
+}
+
+function getTamaModifier(){
+  const h=T.happiness;
+  if(h>75) return 1.2;
+  if(h>50) return 1.0;
+  if(h>25) return 0.85;
+  return 0.7;
+}
+
+function renderTama(){
+  const mood=getTamaMood();
+  // Use custom skin as base, override with mood emoji when distressed
+  const faceEl = document.getElementById('tamaFace');
+  const isDistressed = mood.e === '😾' || mood.e === '🙀' || mood.e === '😴';
+  faceEl.textContent = isDistressed ? mood.e : catSkin;
+  document.getElementById('tamaMood').textContent=mood.msg;
+  updateCatDisplay();
+
+  // Stats
+  const setBar=(id,valId,val)=>{
+    const el=document.getElementById(id);
+    el.style.width=Math.max(0,Math.min(100,val))+'%';
+    el.classList.toggle('low',val<25);
+    document.getElementById(valId).textContent=Math.round(val);
+  };
+  setBar('statHunger','statHungerVal',T.hunger);
+  setBar('statHappy','statHappyVal',T.happiness);
+  setBar('statEnergy','statEnergyVal',T.energy);
+
+  // Buttons affordability + dynamic cost labels
+  const actionIds=['feed','play','treat'];
+  actionIds.forEach(id=>{
+    const cost=tamaCost(id);
+    const btn=document.getElementById('btn'+id.charAt(0).toUpperCase()+id.slice(1));
+    const costEl=document.getElementById('cost'+id.charAt(0).toUpperCase()+id.slice(1));
+    if(btn) btn.classList.toggle('disabled', S.m < cost);
+    if(costEl) costEl.textContent=fmt(cost)+' 🐾';
+  });
+  // sleep button: disabled if energy > 75
+  const sleepBtn=document.getElementById('btnSleep');
+  if(sleepBtn) sleepBtn.classList.toggle('disabled', T.energy>75);
+
+  // Bonus label — friendly language
+  const mod=getTamaModifier();
+  const bl=document.getElementById('tamaBonusLabel');
+  if(mod>1){bl.textContent=`+${Math.round((mod-1)*100)}% к доходу ✨`;bl.className='tama-bonus';}
+  else if(mod<1){bl.textContent=`-${Math.round((1-mod)*100)}% к доходу 😿`;bl.className='tama-bonus neg';}
+  else{bl.textContent='доход в норме 😺';bl.className='tama-bonus';}
+
+  // Influence line
+  const dot=document.getElementById('tamaDot');
+  const inf=document.getElementById('tamaInfluence');
+  const hunger_penalty = T.hunger<25?' · и тычок слабее':'';
+  if(mod>=1.2){dot.className='tama-bonus-dot';inf.textContent='котик счастлив: +20% к мурлыкам'+hunger_penalty;}
+  else if(mod>=1){dot.className='tama-bonus-dot';inf.textContent='всё в норме'+hunger_penalty;}
+  else{dot.className='tama-bonus-dot neg';inf.textContent=`штраф -${Math.round((1-mod)*100)}% к мурлыкам`+hunger_penalty;}
+
+  // Status message
+  const statusMsgs=[];
+  if(T.hunger<30) statusMsgs.push('котик голоден — покорми! 🍱');
+  if(T.happiness<30) statusMsgs.push('котику грустно — поиграй! 🎾');
+  if(T.energy<20) statusMsgs.push('котик устал — уложи спать! 💤');
+  document.getElementById('tamaStatusMsg').textContent=
+    statusMsgs.length?statusMsgs.join('  '):
+    mod>=1.2?'котик счастлив и даёт +20% ко всем мурлыкам! 😸':
+    'корми, играй и давай отдыхать — котик ответит бонусом к мурлыкам 🐾';
+}
+
+function tamaAction(action){
+  initAudio();
+
+  if(action==='sleep'){
+    if(T.energy>75){toast('котик не устал','он слишком бодрый для сна! сначала поиграй');return;}
+    T.energy=Math.min(100,T.energy+45);
+    T.happiness=Math.min(100,T.happiness+5);
+    snd('tama');
+    showTamaEffect('💤 +45 энергии');
+    saveTama();renderTama();return;
+  }
+
+  const cost=tamaCost(action);
+  if(S.m<cost){toast('мало мурлыков','нужно '+fmt(cost)+' мурлыков');return;}
+  S.m-=cost;
+
+  if(action==='feed'){
+    T.hunger=Math.min(100,T.hunger+38);
+    snd('tama');showTamaEffect('🍱 +38 сытости');
+  } else if(action==='play'){
+    T.happiness=Math.min(100,T.happiness+35);
+    T.energy=Math.max(0,T.energy-12);
+    snd('tama');showTamaEffect('🎾 +35 счастья');
+  } else if(action==='treat'){
+    T.hunger=Math.min(100,T.hunger+20);
+    T.happiness=Math.min(100,T.happiness+45);
+    snd('achieve');showTamaEffect('🐟 вкусняшка!');
+  }
+
+  saveTama();updateUI();renderTama();
+}
+
+function showTamaEffect(text){
+  const face=document.getElementById('tamaFace');
+  const rect=face.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='float-thing';
+  el.textContent=text;
+  el.style.left=(rect.left+rect.width/2-30)+'px';
+  el.style.top=(rect.top-10)+'px';
+  el.style.fontSize='.9rem';el.style.color='#5bc4b8';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),900);
+}
+
+// ============================================================
 // SPOTLIGHT TOUR
 // ============================================================
-const TOUR_STEPS = [
-  {
-    targetId: 'mainCard',
-    step: 'шаг 1 из 4',
-    title: 'вот тут мои пожелания тебе 🌸',
-    body: 'каждый раз разные. тыкай в котика или жми кнопку — появится новое. котика тоже можно тыкать просто так, он любит.',
-    arrow: 'down',
-    nextLabel: 'дальше →',
-  },
-  {
-    targetId: 'workCard',
-    step: 'шаг 2 из 4',
-    title: 'а тут смотри сколько до конца работы 💼',
-    body: 'прогресс-бар рабочего дня с 9 утра. в пятницу до 17:00, в остальные дни до 18:00. в выходные — другое сообщение.',
-    arrow: 'down',
-    nextLabel: 'дальше →',
-  },
-  {
-    targetId: 'vacCard',
-    step: 'шаг 3 из 4',
-    title: 'а тут считаем дни до отпуска 🏠',
-    body: 'введи дату начала отпуска и страничка будет его ждать вместе с тобой. ну и подбадривать по дороге.',
-    arrow: 'down',
-    nextLabel: 'дальше →',
-  },
-  {
-    targetId: 'fab',
-    step: 'шаг 4 из 4',
-    title: 'а вот эта кнопка — это кликер 🐾',
-    body: 'нажми на неё — откроется магазин мурлыков. тыкай в котика, копи мурлыки, покупай котиков и людей. классика.',
-    arrow: 'left',
-    nextLabel: 'всё понятно! 🎉',
-  },
+const TOUR_STEPS=[
+  {targetId:'mainCard',step:'шаг 1 из 5',title:'вот тут мои пожелания тебе 🌸',body:'каждый раз разные. тыкай в котика или жми кнопку — появится новое. котика тоже можно тыкать просто так, он любит.',arrow:'down',nextLabel:'дальше →'},
+  {targetId:'workCard',step:'шаг 2 из 5',title:'а тут смотри сколько до конца работы 💼',body:'прогресс-бар рабочего дня с 9 утра. в пятницу до 17:00, в остальные дни до 18:00. в выходные — другое сообщение.',arrow:'down',nextLabel:'дальше →'},
+  {targetId:'vacCard',step:'шаг 3 из 5',title:'а тут считаем дни до отпуска 🏠',body:'введи дату начала отпуска и страничка будет его ждать вместе с тобой.',arrow:'down',nextLabel:'дальше →'},
+  {targetId:'fab',step:'шаг 4 из 5',title:'а вот эта кнопка — это кликер 🐾',body:'нажми на неё — откроется магазин мурлыков. тыкай в котика, копи мурлыки, покупай котиков и людей. классика.',arrow:'left',nextLabel:'дальше →'},
+  {targetId:'btTama',step:'шаг 5 из 5',title:'и новое — тамагочи! 🐱',body:'второй раздел внизу. ухаживай за своим котиком — корми, играй, давай отдыхать. счастливый котик даёт +20% к мурлыкам!',arrow:'up',nextLabel:'всё понятно! 🎉'},
 ];
 
-let tourStep = 0;
-let tourActive = false;
-let canvasRAF = null;
-let spotTarget = null; // current DOMRect
+let tourStep=0,tourActive=false,canvasRAF=null,spotTarget=null;
 
-function startTour() {
-  initAudio(); snd('whoosh');
-  // dismiss splash
-  const splash = document.getElementById('obSplash');
+function startTour(){
+  initAudio();snd('whoosh');
+  const splash=document.getElementById('obSplash');
   splash.classList.add('leave');
-  setTimeout(()=>{ splash.style.display='none'; }, 750);
-
-  tourActive = true;
-  tourStep = 0;
-
-  // init canvas
-  const cv = document.getElementById('obCanvas');
-  cv.style.display = '';
-  cv.width = window.innerWidth; cv.height = window.innerHeight;
-  window.addEventListener('resize', resizeCanvas);
-
-  document.getElementById('obSpot').style.pointerEvents = 'auto';
-
-  showTourStep(0);
-  drawLoop();
-}
-
-function resizeCanvas(){
+  setTimeout(()=>{splash.style.display='none';},750);
+  try{localStorage.setItem('lada_ob3','1');}catch(e){}
+  tourActive=true;tourStep=0;
   const cv=document.getElementById('obCanvas');
-  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  cv.style.display='';cv.width=window.innerWidth;cv.height=window.innerHeight;
+  window.addEventListener('resize',resizeCanvas);
+  document.getElementById('obSpot').style.pointerEvents='auto';
+  document.getElementById('obDots').style.display='flex';
+  setTimeout(()=>{showTourStep(0);drawLoop();},800);
 }
+function resizeCanvas(){const cv=document.getElementById('obCanvas');cv.width=window.innerWidth;cv.height=window.innerHeight;}
 
 function showTourStep(idx){
-  const step = TOUR_STEPS[idx];
-  const target = document.getElementById(step.targetId);
-
-  // scroll target into view first
-  target.scrollIntoView({behavior:'smooth', block:'center'});
-
+  const step=TOUR_STEPS[idx];
+  const target=document.getElementById(step.targetId);
+  target.scrollIntoView({behavior:'smooth',block:'center'});
   setTimeout(()=>{
-    const rect = target.getBoundingClientRect();
-    spotTarget = rect;
-
-    // update popup content
-    document.getElementById('obStepLbl').textContent = step.step;
-    document.getElementById('obPopTitle').textContent = step.title;
-    document.getElementById('obPopBody').textContent = step.body;
-    document.getElementById('obNextBtn').textContent = step.nextLabel;
-
-    // update dots
-    updateDots(idx);
-
-    // position popup
-    positionPopup(rect, step.arrow);
-
-    // show popup
-    const popup = document.getElementById('obPopup');
-    popup.classList.remove('show');
-    void popup.offsetWidth;
-    setTimeout(()=>popup.classList.add('show'), 80);
-
-    // arrow
-    positionArrow(rect, step.arrow);
-
-    initAudio(); snd('open');
-  }, 350);
+    const rect=target.getBoundingClientRect();spotTarget=rect;
+    document.getElementById('obStepLbl').textContent=step.step;
+    document.getElementById('obPopTitle').textContent=step.title;
+    document.getElementById('obPopBody').textContent=step.body;
+    document.getElementById('obNextBtn').textContent=step.nextLabel;
+    updateDots(idx);positionPopup(rect,step.arrow);
+    const popup=document.getElementById('obPopup');popup.classList.remove('show');void popup.offsetWidth;setTimeout(()=>popup.classList.add('show'),80);
+    positionArrow(rect,step.arrow);initAudio();snd('open');
+  },350);
 }
-
-function positionPopup(rect, arrow){
-  const popup = document.getElementById('obPopup');
-  const pw = Math.min(300, window.innerWidth - 32);
-  const margin = 16;
-  const vw = window.innerWidth, vh = window.innerHeight;
-
-  // apply width first so we can measure real height
-  popup.style.width = pw + 'px';
-
-  // ensure popup is measurable (it may be hidden via .show toggles).
-  popup.style.visibility = 'hidden';
-  popup.classList.remove('show');
-  const ph = Math.min(popup.offsetHeight || 220, vh - (margin * 2));
-  // restore visibility after measuring
-  popup.style.visibility = '';
-
-  let top, left;
-
-  // prefer placing below the target if enough room (leave extra space for iOS home indicator)
-  const safeBottom = vh - 44; // leave ~44px for home indicator / bottom UI
-  if (rect.bottom + ph + 40 < safeBottom) {
-    top = rect.bottom + 18;
-  } else {
-    top = rect.top - ph - 18;
-  }
-
-  // center horizontally on target, clamp to screen
-  left = rect.left + rect.width/2 - pw/2;
-  left = Math.max(margin, Math.min(vw - pw - margin, left));
-
-  // if target is at very top (fab), place popup aligned to right
-  if (rect.top < 100) {
-    top = rect.bottom + 14;
-    left = Math.max(margin, vw - pw - margin);
-  }
-
-  // clamp top so popup stays inside viewport; if content is too tall, max-height will allow scrolling
-  top = Math.max(margin + 52, Math.min(vh - ph - margin - 12, top));
-
-  popup.style.top = top + 'px';
-  popup.style.left = left + 'px';
+function positionPopup(rect,arrow){
+  const popup=document.getElementById('obPopup');
+  const pw=Math.min(300,window.innerWidth-32),margin=16,vw=window.innerWidth,vh=window.innerHeight;
+  popup.style.width=pw+'px';popup.style.visibility='hidden';popup.classList.remove('show');
+  const ph=Math.min(popup.offsetHeight||220,vh-(margin*2));popup.style.visibility='';
+  let top,left;const safeBottom=vh-44;
+  if(rect.bottom+ph+40<safeBottom){top=rect.bottom+18;}else{top=rect.top-ph-18;}
+  left=rect.left+rect.width/2-pw/2;left=Math.max(margin,Math.min(vw-pw-margin,left));
+  if(rect.top<100){top=rect.bottom+14;left=Math.max(margin,vw-pw-margin);}
+  if(rect.bottom>vh-100){top=rect.top-ph-18;} // for bottom tab
+  top=Math.max(margin+52,Math.min(vh-ph-margin-12,top));
+  popup.style.top=top+'px';popup.style.left=left+'px';
 }
-
-function positionArrow(rect, direction){
-  const arr = document.getElementById('obArrow');
-  arr.style.opacity = '1';
-  let top, left;
-  arr.textContent = '👆';
-  top = rect.bottom + 4;
-  left = rect.left + rect.width/2 - 16;
-  // clamp arrow inside viewport
-  const vh = window.innerHeight;
-  const margin = 8;
-  top = Math.max(margin, Math.min(vh - 40, top));
-  left = Math.max(margin, Math.min(window.innerWidth - 40, left));
-  arr.style.transform = '';
-  arr.style.top = top + 'px';
-  arr.style.left = left + 'px';
+function positionArrow(rect,direction){
+  const arr=document.getElementById('obArrow');arr.style.opacity='1';
+  let top,left;arr.textContent='👆';
+  top=rect.bottom+4;left=rect.left+rect.width/2-16;
+  const vh=window.innerHeight,margin=8;
+  top=Math.max(margin,Math.min(vh-40,top));left=Math.max(margin,Math.min(window.innerWidth-40,left));
+  arr.style.transform='';arr.style.top=top+'px';arr.style.left=left+'px';
 }
-
 function updateDots(idx){
-  let dotsEl = document.getElementById('obDots');
-  if(!dotsEl.children.length){
-    TOUR_STEPS.forEach((_,i)=>{
-      const d=document.createElement('div');d.className='ob-dot';dotsEl.appendChild(d);
-    });
-  }
+  let dotsEl=document.getElementById('obDots');
+  if(!dotsEl.children.length){TOUR_STEPS.forEach((_,i)=>{const d=document.createElement('div');d.className='ob-dot';dotsEl.appendChild(d);});}
   [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
 }
-
 function tourNext(){
-  if(tourStep < TOUR_STEPS.length - 1){
+  if(tourStep<TOUR_STEPS.length-1){
     tourStep++;
     const popup=document.getElementById('obPopup');popup.classList.remove('show');
-    document.getElementById('obArrow').style.opacity='0';
-    spotTarget=null;
+    document.getElementById('obArrow').style.opacity='0';spotTarget=null;
     setTimeout(()=>showTourStep(tourStep),200);
-  } else {
-    endTour();
-  }
+  }else{endTour();}
 }
-
 function endTour(){
-  if(!tourActive) return; // guard: prevent multiple calls
-  tourActive=false;
-  spotTarget=null;
-  const popup=document.getElementById('obPopup');
-  popup.classList.remove('show');
+  if(!tourActive)return;tourActive=false;spotTarget=null;
+  const popup=document.getElementById('obPopup');popup.classList.remove('show');
   document.getElementById('obArrow').style.opacity='0';
   document.getElementById('obSpot').style.pointerEvents='none';
-
-  const cv=document.getElementById('obCanvas');
-  const ctx=cv.getContext('2d');
-  // fade out canvas
+  const cv=document.getElementById('obCanvas'),ctx=cv.getContext('2d');
   let alpha=0.65;
   const fade=()=>{alpha-=.04;if(alpha<=0){ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';if(canvasRAF){cancelAnimationFrame(canvasRAF);canvasRAF=null;}window.removeEventListener('resize',resizeCanvas);return;}ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle=`rgba(0,0,0,${alpha})`;ctx.fillRect(0,0,cv.width,cv.height);requestAnimationFrame(fade);};
   fade();
-
   try{localStorage.setItem('lada_ob3','1');}catch(e){}
-
   setTimeout(()=>snd('achieve'),200);
   setTimeout(()=>toast('добро пожаловать!','твоя страничка готова 🌸'),400);
 }
-
-// canvas draw loop — spotlight
 function drawLoop(){
-  const cv=document.getElementById('obCanvas');
-  const ctx=cv.getContext('2d');
+  const cv=document.getElementById('obCanvas'),ctx=cv.getContext('2d');
   if(!tourActive){ctx.clearRect(0,0,cv.width,cv.height);return;}
-
-  ctx.clearRect(0,0,cv.width,cv.height);
-  ctx.fillStyle='rgba(0,0,0,0.62)';
-  ctx.fillRect(0,0,cv.width,cv.height);
-
+  ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='rgba(0,0,0,0.62)';ctx.fillRect(0,0,cv.width,cv.height);
   if(spotTarget){
-    const r=spotTarget, pad=12, radius=18;
-    ctx.save();
-    ctx.globalCompositeOperation='destination-out';
-    ctx.beginPath();
-    const x=r.left-pad, y=r.top-pad, w=r.width+pad*2, h=r.height+pad*2;
-    ctx.moveTo(x+radius, y);
-    ctx.arcTo(x+w,y, x+w,y+h, radius);
-    ctx.arcTo(x+w,y+h, x,y+h, radius);
-    ctx.arcTo(x,y+h, x,y, radius);
-    ctx.arcTo(x,y, x+w,y, radius);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+    const r=spotTarget,pad=12,radius=18;ctx.save();ctx.globalCompositeOperation='destination-out';ctx.beginPath();
+    const x=r.left-pad,y=r.top-pad,w=r.width+pad*2,h=r.height+pad*2;
+    ctx.moveTo(x+radius,y);ctx.arcTo(x+w,y,x+w,y+h,radius);ctx.arcTo(x+w,y+h,x,y+h,radius);ctx.arcTo(x,y+h,x,y,radius);ctx.arcTo(x,y,x+w,y,radius);ctx.closePath();ctx.fill();ctx.restore();
   }
-
-  canvasRAF = requestAnimationFrame(drawLoop);
+  canvasRAF=requestAnimationFrame(drawLoop);
 }
 
 // ============================================================
-// NOTIFICATIONS
+// SPLASH — shows every launch, tour only on first visit
 // ============================================================
-const NOTIF_KEY = 'lada_notifs_v1';
-const NOTIF_SENT_KEY = 'lada_notif_sent';
+const APP_VERSION = '2.1';
 
-let notifSettings = {n2h:false, n1h:false, nFri:false, nVac:false, nMurl:false};
-let notifPermission = 'default'; // 'default'|'granted'|'denied'
-let swRegistration = null;
-let notifTimers = [];
-let notifPanelOpen = false;
-let murlyMilestoneNext = 1000; // next murlyki threshold for notification
+const CHANGELOG = {
+  '2.1': {
+    title: 'свежее обновление! 🌸',
+    items: [
+      { icon: '🐱', title: 'тамагочи', text: 'ухаживай за своим котиком — корми, играй, давай отдохнуть' },
+      { icon: '✨', title: 'новые эффекты', text: 'тычок в котика теперь с частицами, рябью и вибрацией' },
+      { icon: '💸', title: 'больше трат', text: 'котик дорожает вместе с твоим доходом — мани-синк как и просили' },
+      { icon: '👆', title: 'свайпы', text: 'листай между вкладками пальцем, как в приложении' },
+      { icon: '🎨', title: 'имя и скин кота', text: 'назови своего котика и выбери ему внешность' },
+    ]
+  }
+};
 
-// --- Service Worker (blob) for notification click -> open page ---
-const PAGE_URL = location.href;
-const SW_CODE = `
-self.addEventListener('notificationclick', function(e) {
-  e.notification.close();
-  var url = (e.notification.data && e.notification.data.url) || '${PAGE_URL}';
-  e.waitUntil(
-    clients.matchAll({type:'window',includeUncontrolled:true}).then(function(wins) {
-      for(var i=0;i<wins.length;i++){
-        if(wins[i].url===url && 'focus' in wins[i]) return wins[i].focus();
-      }
-      if(clients.openWindow) return clients.openWindow(url);
-    })
-  );
-});
-self.addEventListener('push', function(){});
-`;
+function initSplash() {
+  const obDone = localStorage.getItem('lada_ob3');
+  setSplashGreeting();
 
-function registerSW() {
-  if (!('serviceWorker' in navigator)) return;
+  if (!obDone) {
+    // first visit: show tour offer
+    document.getElementById('splashReturn').style.display = 'none';
+    document.getElementById('splashFirst').style.display = 'block';
+  }
+  // splash always visible — will be dismissed by button
+}
+
+function dismissSplash() {
+  const splash = document.getElementById('obSplash');
+  splash.classList.add('leave');
+  setTimeout(() => { splash.style.display = 'none'; }, 750);
+  // mark tour done on skip (so it doesn't show next time)
+  try { localStorage.setItem('lada_ob3', '1'); } catch(e) {}
+  // check if should show changelog
+  setTimeout(() => maybeShowChangelog(), 800);
+}
+
+// ============================================================
+// CHANGELOG
+// ============================================================
+function maybeShowChangelog() {
   try {
-    const blob = new Blob([SW_CODE], {type: 'application/javascript'});
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl, {scope: './'})
-      .then(reg => { swRegistration = reg; })
-      .catch(() => {}); // silently fail on file:// protocol
+    const seen = localStorage.getItem('lada_version_seen');
+    if (seen === APP_VERSION) return;
+    // show changelog only if returning user (has game data)
+    const hasData = !!localStorage.getItem('lada_clicker_v4');
+    if (!hasData) {
+      localStorage.setItem('lada_version_seen', APP_VERSION);
+      return;
+    }
+    showChangelog();
   } catch(e) {}
 }
 
-function loadNotifSettings() {
-  try {
-    const raw = localStorage.getItem(NOTIF_KEY);
-    if (raw) notifSettings = {...notifSettings, ...JSON.parse(raw)};
-  } catch(e) {}
-  // restore murlyki milestone
-  try {
-    const m = localStorage.getItem('lada_murl_milestone');
-    if (m) murlyMilestoneNext = parseFloat(m);
-  } catch(e) {}
+function showChangelog() {
+  const cl = CHANGELOG[APP_VERSION];
+  if (!cl) return;
+  document.getElementById('clVer').textContent = 'версия ' + APP_VERSION;
+  document.getElementById('clTitle').textContent = cl.title;
+  const list = document.getElementById('clList');
+  list.innerHTML = cl.items.map(i =>
+    `<div class="changelog-item">
+      <div class="changelog-item-icon">${i.icon}</div>
+      <div class="changelog-item-text"><strong>${i.title}</strong>${i.text}</div>
+    </div>`
+  ).join('');
+  document.getElementById('changelogModal').classList.add('open');
 }
 
-function saveNotifSettings() {
-  const ids = ['n2h','n1h','nFri','nVac','nMurl'];
-  ids.forEach(id => {
-    notifSettings[id] = document.getElementById(id)?.checked || false;
+function dismissChangelog() {
+  document.getElementById('changelogModal').classList.remove('open');
+  try { localStorage.setItem('lada_version_seen', APP_VERSION); } catch(e) {}
+}
+
+// ============================================================
+// CAT LOADING — multi-tier fallback (works without VPN in RU)
+// ============================================================
+// Tier 1: thecatapi.com (needs VPN in RU)
+// Tier 2: cataas.com (needs VPN in RU)
+// Tier 3: Wikimedia Commons direct cat GIFs (accessible everywhere)
+// Tier 4: emoji cat display
+const CAT_FALLBACKS = [
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/320px-Kittyply_edit1.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/320px-RedCat_8727.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Siam_lilacpoint.jpg/320px-Siam_lilacpoint.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Bacground_cat.jpg/320px-Bacground_cat.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/320px-Cat_poster_1.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Collage_of_Nine_Cats-compressed.jpg/320px-Collage_of_Nine_Cats-compressed.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/320px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sleeping_cat_on_her_back.jpg/320px-Sleeping_cat_on_her_back.jpg',
+];
+
+function loadCat(){
+  const img = document.getElementById('catImg');
+  const ld  = document.getElementById('loader');
+  img.classList.add('hidden');
+  ld.classList.remove('done');
+
+  // show emoji loader with current skin while waiting
+  ld.textContent = catSkin || '🐾';
+
+  const fallback = () => {
+    const url = CAT_FALLBACKS[Math.floor(Math.random() * CAT_FALLBACKS.length)];
+    tryLoad(url, () => showEmojiCat());
+  };
+
+  const tryLoad = (src, onFail) => {
+    img.onload  = () => { img.classList.remove('hidden'); ld.classList.add('done'); };
+    img.onerror = onFail;
+    img.src = src;
+  };
+
+  const showEmojiCat = () => {
+    // last resort: emoji cat in the loader, hide the img entirely
+    img.classList.add('hidden');
+    ld.classList.remove('done');
+    ld.style.fontSize = '5rem';
+    ld.style.animation = 'pulse 2s ease-in-out infinite';
+    ld.textContent = catSkin || '🐱';
+  };
+
+  // Tier 1: thecatapi
+  const t1 = new Promise((res, rej) => {
+    const c = new AbortController();
+    const timer = setTimeout(() => { c.abort(); rej(); }, 4000);
+    fetch(`https://api.thecatapi.com/v1/images/search?mime_types=gif&limit=1&_=${Date.now()}`, { signal: c.signal })
+      .then(r => r.json())
+      .then(d => { clearTimeout(timer); if(d&&d[0]&&d[0].url) res(d[0].url); else rej(); })
+      .catch(rej);
   });
-  try { localStorage.setItem(NOTIF_KEY, JSON.stringify(notifSettings)); } catch(e) {}
-  scheduleNotifs();
-}
 
-function applyNotifSettingsToUI() {
-  const ids = ['n2h','n1h','nFri','nVac','nMurl'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.checked = notifSettings[id];
+  // Tier 2: cataas
+  const t2 = new Promise((res, rej) => {
+    const c = new AbortController();
+    const timer = setTimeout(() => { c.abort(); rej(); }, 4000);
+    fetch(`https://cataas.com/cat/gif?t=${Date.now()}`, { signal: c.signal })
+      .then(r => { clearTimeout(timer); if(r.ok) res(r.url); else rej(); })
+      .catch(rej);
   });
-}
 
-async function requestNotifPermission() {
-  if (!('Notification' in window)) return 'unsupported';
-  if (Notification.permission === 'granted') return 'granted';
-  if (Notification.permission === 'denied') return 'denied';
-  const result = await Notification.requestPermission();
-  return result;
-}
-
-async function toggleNotifs() {
-  notifPanelOpen = !notifPanelOpen;
-  const panel = document.getElementById('notifPanel');
-  panel.style.display = notifPanelOpen ? 'block' : 'none';
-  document.getElementById('notifBtn').textContent = notifPanelOpen ? '🔕' : '🔔';
-
-  if (notifPanelOpen) {
-    // request permission when opening panel
-    if ('Notification' in window) {
-      const perm = await requestNotifPermission();
-      notifPermission = perm;
-      updateNotifBlockedUI();
-      if (perm === 'granted') {
-        registerSW();
-        scheduleNotifs();
-      }
-    } else {
-      document.getElementById('notifBlocked').style.display = 'block';
-      document.getElementById('notifBlocked').textContent = 'уведомления не поддерживаются в этом браузере.';
-    }
-
-    // close panel if clicking outside
-    setTimeout(() => {
-      document.addEventListener('click', closePanelOutside);
-    }, 50);
-  } else {
-    document.removeEventListener('click', closePanelOutside);
-  }
-}
-
-function closePanelOutside(e) {
-  const panel = document.getElementById('notifPanelInner');
-  const btn = document.getElementById('notifBtn');
-  if (panel && !panel.contains(e.target) && e.target !== btn) {
-    notifPanelOpen = false;
-    document.getElementById('notifPanel').style.display = 'none';
-    document.getElementById('notifBtn').textContent = '🔔';
-    document.removeEventListener('click', closePanelOutside);
-  }
-}
-
-function updateNotifBlockedUI() {
-  const el = document.getElementById('notifBlocked');
-  if (notifPermission === 'denied') {
-    el.style.display = 'block';
-  } else {
-    el.style.display = 'none';
-  }
-}
-
-function sendNotif(title, body, tag) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  try {
-    const opts = {
-      body, tag, icon: '🌸',
-      badge: '🌸',
-      data: { url: PAGE_URL }
-    };
-    if (swRegistration && swRegistration.showNotification) {
-      swRegistration.showNotification(title, opts);
-    } else {
-      new Notification(title, opts);
-    }
-  } catch(e) {}
-}
-
-function clearNotifTimers() {
-  notifTimers.forEach(t => clearTimeout(t));
-  notifTimers = [];
-}
-
-function msUntil(h, m) {
-  const now = new Date();
-  const target = new Date();
-  target.setHours(h, m || 0, 0, 0);
-  let diff = target - now;
-  if (diff < 0) diff += 24 * 3600 * 1000; // next day
-  return diff;
-}
-
-function todayKey() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function wasSentToday(tag) {
-  try {
-    const raw = localStorage.getItem(NOTIF_SENT_KEY);
-    const sent = raw ? JSON.parse(raw) : {};
-    return sent[tag] === todayKey();
-  } catch(e) { return false; }
-}
-
-function markSent(tag) {
-  try {
-    const raw = localStorage.getItem(NOTIF_SENT_KEY);
-    const sent = raw ? JSON.parse(raw) : {};
-    sent[tag] = todayKey();
-    localStorage.setItem(NOTIF_SENT_KEY, JSON.stringify(sent));
-  } catch(e) {}
-}
-
-function scheduleNotifs() {
-  clearNotifTimers();
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-
-  const now = new Date();
-  const day = now.getDay(); // 0=sun,1=mon...5=fri,6=sat
-  const isWeekday = day >= 1 && day <= 5;
-  const isFriday = day === 5;
-  const isThursday = day === 4;
-
-  // 2h before end of work
-  if (notifSettings.n2h && isWeekday) {
-    const endH = isFriday ? 17 : 18;
-    const notifH = endH - 2; // 15 or 16
-    const ms = msUntil(notifH, 0);
-    if (ms < 23 * 3600 * 1000) { // only schedule if within today
-      const t = setTimeout(() => {
-        if (!wasSentToday('2h')) {
-          sendNotif('почти финишная прямая! 💼', `до конца работы осталось 2 часа. держимся!`, '2h');
-          markSent('2h');
-        }
-      }, ms);
-      notifTimers.push(t);
-    }
-  }
-
-  // 1h before end of work
-  if (notifSettings.n1h && isWeekday) {
-    const endH = isFriday ? 17 : 18;
-    const notifH = endH - 1; // 16 or 17
-    const ms = msUntil(notifH, 0);
-    if (ms < 23 * 3600 * 1000) {
-      const t = setTimeout(() => {
-        if (!wasSentToday('1h')) {
-          const msg = isFriday ? 'один час до свободы! и это же пятница!' : 'остался всего один час! финишная прямая!';
-          sendNotif('час до конца! 🎉', msg, '1h');
-          markSent('1h');
-        }
-      }, ms);
-      notifTimers.push(t);
-    }
-  }
-
-  // Tomorrow is Friday (send Thursday ~17:50 or whenever page is open on Thursday)
-  if (notifSettings.nFri && isThursday) {
-    if (!wasSentToday('fri')) {
-      // send at 17:50 on Thursday (or now if already past)
-      const ms = msUntil(17, 50);
-      if (ms < 8 * 3600 * 1000) { // within next 8h = today
-        const t = setTimeout(() => {
-          sendNotif('завтра пятница! 🎉', 'совсем немного осталось. завтра до 17:00 и всё!', 'fri');
-          markSent('fri');
-        }, ms);
-        notifTimers.push(t);
-      }
-    }
-  }
-
-  // Vacation soon (check once on page load, fire after short delay if needed)
-  if (notifSettings.nVac) {
-    const stored = getVD();
-    if (stored && !wasSentToday('vac')) {
-      const vd = new Date(stored); vd.setHours(0,0,0,0);
-      const today = new Date(); today.setHours(0,0,0,0);
-      const daysLeft = Math.ceil((vd - today) / 864e5);
-      if (daysLeft > 0 && daysLeft <= 7) {
-        const t = setTimeout(() => {
-          const msg = daysLeft === 1 ? 'завтра отпуск!!!! ладошка заслужила!' : `до отпуска ${daysLeft} ${daysLeft<5?'дня':'дней'}. уже совсем скоро!`;
-          sendNotif('скоро отпуск! 🏠', msg, 'vac');
-          markSent('vac');
-        }, 5000); // 5 sec after page load
-        notifTimers.push(t);
-      }
-    }
-  }
-}
-
-// Called from clicker tick when murlyki pass milestones
-function checkMurlykiNotif() {
-  if (!notifSettings.nMurl) return;
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  if (S.total >= murlyMilestoneNext) {
-    sendNotif('мурлыки накопились! 🐾', `уже ${fmt(S.total)} мурлыков. можно зайти в магазин!`, 'murl_' + murlyMilestoneNext);
-    murlyMilestoneNext = murlyMilestoneNext < 5000 ? murlyMilestoneNext * 5 :
-                         murlyMilestoneNext < 50000 ? murlyMilestoneNext * 2 :
-                         murlyMilestoneNext * 3;
-    try { localStorage.setItem('lada_murl_milestone', murlyMilestoneNext); } catch(e) {}
-  }
+  t1.then(url => tryLoad(url, () => {
+    t2.then(url2 => tryLoad(url2, fallback)).catch(fallback);
+  })).catch(() => {
+    t2.then(url2 => tryLoad(url2, fallback)).catch(fallback);
+  });
 }
 
 // ============================================================
 // INIT
 // ============================================================
-loadS(); applyDark();
+loadS();loadTama();loadCatCustom();applyDark();
 if(!soundOn) document.getElementById('soundBtn').textContent='🔇';
 
-// notifications
-loadNotifSettings();
-applyNotifSettingsToUI();
-if('Notification' in window && Notification.permission === 'granted') {
-  notifPermission = 'granted';
-  registerSW();
-  scheduleNotifs();
-}
-
-renderGreeting(); refreshMsg(); renderWork(); renderVacation(); updateUI();
+renderGreeting();refreshMsg();renderWork();renderVacation();updateUI();
 document.getElementById('dateLine').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
 
-setSplashGreeting();
+initSplash();
 
-// Touch handler for cat — reliable on all mobile browsers
+// Touch handler for cat
 (function(){
-  const frame = document.getElementById('catFrame');
-  let touchHandled = false;
-  frame.addEventListener('touchstart', function(e){
-    e.preventDefault();
-    touchHandled = true;
-    onCatClick(e);
-  }, {passive: false});
-  frame.addEventListener('click', function(e){
-    if(touchHandled){ touchHandled = false; return; } // already handled by touchstart
+  const frame=document.getElementById('catFrame');
+  let touchHandled=false;
+  frame.addEventListener('touchstart',function(e){
+    e.preventDefault();touchHandled=true;onCatClick(e);
+  },{passive:false});
+  frame.addEventListener('click',function(e){
+    if(touchHandled){touchHandled=false;return;}
     onCatClick(e);
   });
-  // Remove onclick attribute to avoid double-fire
   frame.removeAttribute('onclick');
 })();
 
-// check if first visit
-const obDone = localStorage.getItem('lada_ob3');
-if(obDone){
-  // returning visitor — hide splash immediately, ensure tour overlay is off
-  document.getElementById('obSplash').style.display='none';
-  document.getElementById('obSpot').style.pointerEvents='none';
-  document.getElementById('obCanvas').style.display='none';
-}
-
 setInterval(tick,200);
 setInterval(saveS,10000);
+setInterval(saveTama,15000);
 setInterval(renderWork,60000);
+
+// show swipe dots after a moment
+setTimeout(()=>{
+  const hint=document.getElementById('swipeHint');
+  hint.classList.add('show');
+  clearTimeout(hint._t);
+  hint._t=setTimeout(()=>hint.classList.remove('show'),2500);
+},1200);
 </script>
 </body>
 </html>
